@@ -26,7 +26,7 @@ public class PacketUtilMess {
 				NetworkingHacks.setPos(pos);
 				PositionalInfo info = new PositionalInfo(player);
 				info.scalePlayerReach(player, pos.upb());
-				info.adjust(player, player.level, pos, !player.getLevel().isClientSide);
+				info.adjust(player, player.level(), pos, !player.level().isClientSide);
 				
 				pkts.put(packet, info);
 			}

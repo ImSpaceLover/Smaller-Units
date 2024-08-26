@@ -4,6 +4,7 @@ import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
 import net.minecraft.core.*;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
 import net.minecraft.server.level.ChunkHolder;
@@ -15,6 +16,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
@@ -58,7 +60,12 @@ public class TickerChunkCache extends ServerChunkCache implements ITickerChunkCa
         this.chunkMap = new UnitChunkMap(p_214982_, p_214983_, p_214984_, p_214985_, p_214986_, this.mainThreadProcessor, this, p_214987_, p_214991_, p_214992_, p_214993_, p_214988_, p_214990_);
         this.upb = upb;
         columns = new BasicVerticalChunk[33 * 33 * upb * upb][];
-        empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), Holder.Reference.createStandAlone(this.level.registryAccess().registry(Registry.BIOME_REGISTRY).get(), Biomes.THE_VOID));
+        empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), Holder.Reference.createStandAlone(new HolderOwner<>() {
+            @Override
+            public boolean canSerializeIn(HolderOwner<Biome> $$0) {
+                return HolderOwner.super.canSerializeIn($$0);
+            }
+        }, Biomes.THE_VOID));
         lightEngine = new NotThreadedSULightManager(this, this.chunkMap, true);
         this.dataStorage = new SUDimStorage(null, p_214984_);
     }

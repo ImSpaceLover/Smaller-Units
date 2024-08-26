@@ -6,9 +6,10 @@ import net.minecraft.client.multiplayer.ClientChunkCache;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
-import net.minecraft.core.Registry;
+import net.minecraft.core.HolderOwner;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.EmptyLevelChunk;
@@ -23,7 +24,6 @@ import tfc.smallerunits.simulation.chunk.BasicVerticalChunk;
 import tfc.smallerunits.simulation.chunk.VChunkLookup;
 import tfc.smallerunits.simulation.level.ITickerChunkCache;
 import tfc.smallerunits.simulation.level.ITickerLevel;
-import tfc.smallerunits.simulation.light.SULightManager;
 import tfc.smallerunits.utils.IHateTheDistCleaner;
 
 import java.lang.ref.WeakReference;
@@ -42,8 +42,12 @@ public class TickerClientChunkCache extends ClientChunkCache implements ITickerC
 		this.upb = upb;
 		columns = new BasicVerticalChunk[33 * 33 * upb * upb][];
 //		this.chunkMap = new UnitChunkMap(p_184009_, p_184010_, p_184011_, p_184012_, p_184013_, this.mainThreadProcessor, this, p_184014_, p_184018_, p_184019_, p_184020_, p_184015_, p_184017_);
-		empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), Holder.Reference.createStandAlone(this.level.registryAccess().registry(Registry.BIOME_REGISTRY).get(), Biomes.THE_VOID));
-		lightEngine = new SULightManager(this, true, true);
+		empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), Holder.Reference.createStandAlone(new HolderOwner<>() {
+            @Override
+            public boolean canSerializeIn(HolderOwner<Biome> $$0) {
+                return HolderOwner.super.canSerializeIn($$0);
+            }
+        }, Biomes.THE_VOID));
 	}
 
 //	@Override
@@ -172,8 +176,8 @@ public class TickerClientChunkCache extends ClientChunkCache implements ITickerC
 		);
 		ck[i] = bvci;
 		allChunks.add(bvci);
-		bvci.setClientLightReady(true);
-		getLightEngine().enableLightSources(new ChunkPos(pChunkX, pChunkZ), true);
+		bvci.setLightCorrect(true);
+		getLightEngine().setLightEnabled(new ChunkPos(pChunkX, pChunkZ), true);
 		((ClientLevel) level).onChunkLoaded(ckPos);
 		PlatformUtils.chunkLoaded(bvci);
 		

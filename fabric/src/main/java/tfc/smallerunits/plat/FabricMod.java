@@ -6,8 +6,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerChunkEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
-import net.fabricmc.fabric.impl.client.texture.SpriteRegistryCallbackHolder;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.chunk.ChunkAccess;
@@ -51,14 +49,10 @@ public class FabricMod extends SmallerUnits implements ModInitializer {
 				ServerTickEvents.END_SERVER_TICK.register((n) -> tick.run());
 		}
 	}
-	
+
 	@Override
-	public void registerAtlas(BiConsumer<ResourceLocation, Consumer<ResourceLocation>> onTextureStitch) {
-		SpriteRegistryCallbackHolder.EVENT_GLOBAL.register((listener, whatdoyouwantfabric) -> {
-			onTextureStitch.accept(listener.location(), whatdoyouwantfabric::register);
-		});
-	}
-	
+	public void registerAtlas(BiConsumer<ResourceLocation, Consumer<ResourceLocation>> onTextureStitch) {}
+
 	@Override
 	public void registerChunkStatus(BiConsumer<LevelAccessor, ChunkAccess> onChunkLoaded, BiConsumer<LevelAccessor, ChunkAccess> onChunkUnloaded) {
 		ServerChunkEvents.CHUNK_LOAD.register(onChunkLoaded::accept);

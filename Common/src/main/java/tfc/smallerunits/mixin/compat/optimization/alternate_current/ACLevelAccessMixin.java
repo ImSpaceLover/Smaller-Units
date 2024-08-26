@@ -18,10 +18,11 @@ import tfc.smallerunits.simulation.level.ITickerLevel;
 
 @Mixin(value = LevelHelper.class, remap = false)
 public class ACLevelAccessMixin {
-	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/chunk/ChunkAccess;setUnsaved(Z)V"), method = "setWireState")
-	private static void preUpdate(ServerLevel level, BlockPos pos, BlockState state, boolean updateNeighborShapes, CallbackInfoReturnable<Boolean> cir) {
-		ITickerLevel.update(level, pos);
-	}
+	//TODO setUnsaved won't work anymore! Do we need to do this?
+	//@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/chunk/ChunkAccess;setUnsaved(Z)V"), method = "setWireState")
+	//private static void preUpdate(ServerLevel level, BlockPos pos, BlockState state, boolean updateNeighborShapes, CallbackInfoReturnable<Boolean> cir) {
+	//	ITickerLevel.update(level, pos);
+	//}
 	
 	@Inject(at = @At("HEAD"), method = "setWireState", cancellable = true)
 	private static void setWireState(ServerLevel level, BlockPos pos, BlockState state, boolean updateNeighborShapes, CallbackInfoReturnable<Boolean> cir) {

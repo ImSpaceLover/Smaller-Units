@@ -136,7 +136,7 @@ public class PositionUtils {
 	}
 	
 	public static Pair<Level, BlockPos> getOnPos(Entity entity, int upb) {
-		Level lvl = entity.getLevel();
+		Level lvl = entity.level();
 		Vec3 position = entity.getPosition(0);
 		int i = Mth.floor(position.x);
 		int j = Mth.floor(position.y);
@@ -154,7 +154,7 @@ public class PositionUtils {
 		double x = HitboxScaling.scaleX((ITickerLevel) smallWorld, position.x);
 		double y = HitboxScaling.scaleY((ITickerLevel) smallWorld, position.y);
 		double z = HitboxScaling.scaleZ((ITickerLevel) smallWorld, position.z);
-		BlockPos scaledPos = new BlockPos(Math.floor(x), Math.floor(y), Math.floor(z));
+		BlockPos scaledPos = new BlockPos((int) Math.floor(x), (int) Math.floor(y), (int) Math.floor(z));
 		return Pair.of(smallWorld, onPos(smallWorld, scaledPos, entity));
 	}
 	

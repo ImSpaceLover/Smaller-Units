@@ -73,7 +73,7 @@ public class SUCapabilityManager {
 			if (capability == null) return;
 			for (UnitSpace unit : capability.getUnits()) {
 				if (unit == null) continue;
-				unit.sendRedirectableSync(player);
+				unit.sendSync(PacketTarget.player(player));
 			}
 		}
 	}

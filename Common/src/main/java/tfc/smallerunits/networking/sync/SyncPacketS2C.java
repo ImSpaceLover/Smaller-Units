@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
@@ -54,9 +55,8 @@ public class SyncPacketS2C extends Packet {
 				tg.putInt("x", tile.getBlockPos().getX());
 				tg.putInt("y", tile.getBlockPos().getY());
 				tg.putInt("z", tile.getBlockPos().getZ());
-				tg.putString("id", net.minecraft.core.Registry.BLOCK_ENTITY_TYPE.getKey(
-						tile.getType()
-				).toString());
+				//TODO does the below work at all?
+				tg.putString("id", Registries.BLOCK_ENTITY_TYPE.registry().toString());
 				beData.add(tg);
 			}
 		}

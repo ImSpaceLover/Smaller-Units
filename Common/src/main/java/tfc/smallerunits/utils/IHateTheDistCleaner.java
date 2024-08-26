@@ -1,6 +1,5 @@
 package tfc.smallerunits.utils;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -8,7 +7,6 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
-import net.minecraft.network.Connection;
 import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.resources.ResourceKey;
@@ -17,7 +15,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import qouteall.imm_ptl.core.ClientWorldLoader;
+import org.joml.Vector3f;
 import tfc.smallerunits.TileResizingItem;
 import tfc.smallerunits.client.access.workarounds.ParticleEngineHolder;
 import tfc.smallerunits.client.render.compat.UnitParticleEngine;
@@ -112,7 +110,7 @@ public class IHateTheDistCleaner {
 	}
 	
 	public static void resetClient(Player pPlayer, Level lvl, Object engine) {
-		if (pPlayer.level.isClientSide) {
+		if (pPlayer.level().isClientSide) {
 			if (pPlayer instanceof LocalPlayer) {
 				Minecraft.getInstance().level = ((LocalPlayer) pPlayer).clientLevel = (ClientLevel) lvl;
 				
@@ -133,7 +131,7 @@ public class IHateTheDistCleaner {
 	
 	public static Object getParticleEngine(Player player) {
 		if (player == Minecraft.getInstance().player) {
-			if (player.level instanceof ParticleEngineHolder engineHolder) {
+			if (player.level() instanceof ParticleEngineHolder engineHolder) {
 				ParticleEngine engine = engineHolder.myEngine();
 				if (engine == null) engineHolder.setParticleEngine(engine = Minecraft.getInstance().particleEngine);
 				return engine;
@@ -153,10 +151,6 @@ public class IHateTheDistCleaner {
 	
 	public static void setClientLevel(Level clientLevel) {
 		Minecraft.getInstance().level = (ClientLevel) clientLevel;
-	}
-	
-	public static Level getOptionalIPWorld(ResourceKey<Level> lvl) {
-		return ClientWorldLoader.getOptionalWorld(lvl);
 	}
 	
 	public static ClientPacketListener getConnection() {

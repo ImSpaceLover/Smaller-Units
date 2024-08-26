@@ -51,7 +51,7 @@ public class UnitInteractionPacket extends Packet {
 	public void handle(NetCtx ctx) {
 		if (checkServer(ctx)) {
 			Player player = ctx.getSender();
-			Level lvl = ctx.getSender().level;
+			Level lvl = ctx.getSender().level();
 			
 			ChunkAccess access = Minecraft.getInstance().level.getChunk(result.getBlockPos());
 			if (access instanceof EmptyLevelChunk) return;

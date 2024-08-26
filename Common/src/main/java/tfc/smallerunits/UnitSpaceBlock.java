@@ -18,8 +18,6 @@ import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
-import net.minecraft.world.level.material.Material;
-import net.minecraft.world.level.material.MaterialColor;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -43,7 +41,7 @@ import tfc.smallerunits.utils.selection.UnitShape;
 public class UnitSpaceBlock extends Block implements IContextAwareLadder {
 	public UnitSpaceBlock() {
 		super(
-				Properties.of(Material.STONE, MaterialColor.COLOR_BLACK)
+				Properties.of()
 						.isSuffocating((a, b, c) -> false)
 						.isViewBlocking((a, b, c) -> false)
 						.dynamicShape()
@@ -212,7 +210,7 @@ public class UnitSpaceBlock extends Block implements IContextAwareLadder {
 			BlockState blockOn = smallWorld.getBlockState(posOn);
 			BlockState feetState = entity.getFeetBlockState();
 			Vec3 position = entity.getPosition(0);
-			BlockState legState = smallWorld.getBlockState(new BlockPos(position.x, position.y + 0.15, position.z));
+			BlockState legState = smallWorld.getBlockState(new BlockPos((int) position.x, (int) (position.y + 0.15), (int) position.z));
 			boolean onScaffold = IContextAwareScaffold.isBlockAScaffold(blockOn, pLevel, pPos, entity);
 			boolean inScaffold = IContextAwareScaffold.isBlockAScaffold(feetState, pLevel, pPos, entity);
 			boolean legScaffold = IContextAwareScaffold.isBlockAScaffold(legState, pLevel, pPos, entity);
@@ -296,7 +294,7 @@ public class UnitSpaceBlock extends Block implements IContextAwareLadder {
 			Loggers.SU_LOGGER.warn("Redstone handling happened from multiple blocks away " + pPos + " " + pFromPos);
 			return;
 		}
-		Direction dir = Direction.fromNormal(nx, ny, nz);
+		Direction dir = Direction.fromDelta(nx, ny, nz);
 		
 		Direction right = Math3d.getRight(dir);
 		Direction up = Math3d.getUp(dir);

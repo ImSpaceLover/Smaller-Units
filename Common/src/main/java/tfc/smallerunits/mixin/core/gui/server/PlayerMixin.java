@@ -18,7 +18,7 @@ public class PlayerMixin {
 		if (info != null) {
 			screenAttachments.update((Player) (Object) this);
 			info.scalePlayerReach(((Player) (Object) this), screenAttachments.getDescriptor().getReachScale());
-			info.adjust((Player) (Object) this, ((Player) (Object) this).getLevel(), screenAttachments.getDescriptor(), !((Entity) (Object) this).getLevel().isClientSide);
+			info.adjust((Player) (Object) this, ((Player) (Object) this).level(), screenAttachments.getDescriptor(), !((Entity) (Object) this).level().isClientSide);
 		}
 	}
 	

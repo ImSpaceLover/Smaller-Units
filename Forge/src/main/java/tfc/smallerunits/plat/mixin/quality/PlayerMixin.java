@@ -20,7 +20,7 @@ public abstract class PlayerMixin {
 	public void afflictMiningSpeed(BlockState pState, BlockPos pos, CallbackInfoReturnable<Float> cir) {
 		//noinspection ConstantConditions
 		if (!((Object) this instanceof FakePlayer)) {
-			if (((Player) (Object) this).level instanceof ITickerLevel tickerWorld) {
+			if (((Player) (Object) this).level() instanceof ITickerLevel tickerWorld) {
 				cir.setReturnValue(cir.getReturnValue() * tickerWorld.getUPB());
 			}
 		}

@@ -9,6 +9,7 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtIo;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -136,7 +137,7 @@ public class EntityManager<T extends EntityAccess> extends PersistentEntitySecti
 	}
 	
 	@Override
-	public void updateChunkStatus(ChunkPos pPos, ChunkHolder.FullChunkStatus pStatus) {
+	public void updateChunkStatus(ChunkPos pPos, FullChunkStatus pStatus) {
 		super.updateChunkStatus(pPos, pStatus);
 	}
 	

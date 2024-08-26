@@ -2,9 +2,11 @@ package tfc.smallerunits.crafting;
 
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -12,10 +14,10 @@ import tfc.smallerunits.TileResizingItem;
 import tfc.smallerunits.utils.config.ServerConfig;
 
 public class UnitResizingRecipe extends CustomRecipe {
-	public UnitResizingRecipe(ResourceLocation idIn) {
-		super(idIn);
+	public UnitResizingRecipe(ResourceLocation resourceLocation, CraftingBookCategory craftingBookCategory) {
+		super(resourceLocation, craftingBookCategory);
 	}
-	
+
 	@Override
 	public boolean matches(CraftingContainer pContainer, Level pLevel) {
 		if (!RecipeUtils.matchesShapelessResizing(pContainer)) return false;
@@ -28,14 +30,14 @@ public class UnitResizingRecipe extends CustomRecipe {
 			return false;
 		return upb < ServerConfig.SizeOptions.maxScale || ((TileResizingItem) stack2.getItem()).getScale() <= 0;
 	}
-	
+
 	@Override
 	public NonNullList<ItemStack> getRemainingItems(CraftingContainer inv) {
 		return RecipeUtils.getRemainingItems(inv);
 	}
 	
 	@Override
-	public ItemStack assemble(CraftingContainer inv) {
+	public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
 		Pair<ItemStack, ItemStack> pair = RecipeUtils.getUnitAndHammer(inv);
 		ItemStack stack1 = pair.getFirst();
 		stack1.setCount(1);

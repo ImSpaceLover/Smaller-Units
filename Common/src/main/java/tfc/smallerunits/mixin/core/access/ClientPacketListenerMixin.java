@@ -17,7 +17,6 @@ public class ClientPacketListenerMixin implements PacketListenerAccessor {
 	@Override
 	public void setWorld(Level lvl) {
 		this.level = (ClientLevel) lvl;
-		Minecraft.getInstance().player.level = lvl;
 		Minecraft.getInstance().player.clientLevel = (ClientLevel) lvl;
 		Minecraft.getInstance().level = (ClientLevel) lvl;
 	}

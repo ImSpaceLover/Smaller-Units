@@ -31,21 +31,21 @@ public class FabricClientProxyMixin {
 	}
 	
 	@Inject(at = @At("HEAD"), method = "lambda$registerEvents$4", cancellable = true)
-	private static void preUnloadWorld(ClientLevel level, LevelChunk chunk, CallbackInfo ci) {
+	private static void preUnloadWorld(Level level, BlockHitResult hitResult, CallbackInfo ci) {
 		if (level instanceof ITickerLevel) {
 			ci.cancel();
 		}
 	}
 	
 	@Inject(at = @At("HEAD"), method = "lambda$registerEvents$2", cancellable = true)
-	private static void preAttackBlock(Player player, Level level, InteractionHand interactionHand, BlockPos blockPos, Direction direction, CallbackInfoReturnable<InteractionResult> cir) {
+	private static void preAttackBlock(Level level, BlockPos blockPos, CallbackInfo ci) {
 		if (level instanceof ITickerLevel) {
-			cir.setReturnValue(InteractionResult.PASS);
+			ci.cancel();
 		}
 	}
 	
 	@Inject(at = @At("HEAD"), method = "lambda$registerEvents$3", cancellable = true)
-	private static void preUseBlock(Player player, Level level, InteractionHand hand, BlockHitResult hitResult, CallbackInfoReturnable<InteractionResult> cir) {
+	private static void preUseBlock(Player player, Level level, InteractionHand interactionHand, BlockPos blockPos, Direction direction, CallbackInfoReturnable<InteractionResult> cir) {
 		if (level instanceof ITickerLevel) {
 			cir.setReturnValue(InteractionResult.PASS);
 		}

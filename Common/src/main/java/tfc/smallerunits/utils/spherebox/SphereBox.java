@@ -1,10 +1,10 @@
 package tfc.smallerunits.utils.spherebox;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector3f;
-import com.mojang.math.Vector4f;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class SphereBox {
 	private static final ThreadLocal<Vector3f> offset = ThreadLocal.withInitial(() -> new Vector3f(0, 0, 0));
@@ -22,7 +22,7 @@ public class SphereBox {
 				(float) (bounds.minZ + bounds.maxZ) / 2f
 		);
 		
-		Quaternion quaternion = box.quaternion;
+		Quaternionf quaternion = box.quaternion;
 		
 		VecMath.rotate(point, quaternion, worker);
 		

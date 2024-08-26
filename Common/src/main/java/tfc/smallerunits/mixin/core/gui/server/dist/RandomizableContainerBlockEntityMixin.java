@@ -25,7 +25,7 @@ import tfc.smallerunits.utils.PositionalInfo;
 public class RandomizableContainerBlockEntityMixin {
 	@Inject(at = @At("HEAD"), method = "stillValid", cancellable = true)
 	public void scale(Player $$0, CallbackInfoReturnable<Boolean> cir) {
-		if ($$0.getLevel() instanceof ITickerLevel) {
+		if ($$0.level() instanceof ITickerLevel) {
 			AttributeInstance instance = PlatformUtils.getReachAttrib($$0);
 			if (instance == null) return;
 			AttributeModifier modifier = instance.getModifier(PositionalInfo.SU_REACH_UUID);

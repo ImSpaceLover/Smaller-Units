@@ -14,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
 public class NotThreadedSULightManager extends ThreadedLevelLightEngine {
 	public NotThreadedSULightManager(LightChunkGetter level, ChunkMap map, boolean sky) {
 		super(level, map, sky, null, null);
-		this.blockEngine = new SULightEngine(level, LightLayer.BLOCK, null);
 	}
 	
 	@Override
@@ -33,13 +32,6 @@ public class NotThreadedSULightManager extends ThreadedLevelLightEngine {
 	}
 	
 	@Override
-	public void onBlockEmissionIncrease(BlockPos p_75824_, int p_75825_) {
-		if (this.blockEngine != null) {
-			this.blockEngine.onBlockEmissionIncrease(p_75824_, p_75825_);
-		}
-	}
-	
-	@Override
 	public boolean hasLightWork() {
 		if (this.skyEngine != null && this.skyEngine.hasLightWork()) {
 			return true;
@@ -49,21 +41,18 @@ public class NotThreadedSULightManager extends ThreadedLevelLightEngine {
 	}
 	
 	@Override
-	public int runUpdates(int maxUpdates, boolean runBlock, boolean runSky) {
-		boolean block = runBlock && blockEngine != null && blockEngine.hasLightWork();
-		boolean sky = runSky && skyEngine != null && skyEngine.hasLightWork();
+	public int runLightUpdates() {
+		boolean block = blockEngine != null && blockEngine.hasLightWork();
+		boolean sky = skyEngine != null && skyEngine.hasLightWork();
 		if (block && sky) {
-			int i = maxUpdates / 2;
-			int j = this.blockEngine.runUpdates(i, true, true);
-			int k = maxUpdates - i + j;
-			int l = this.skyEngine.runUpdates(k, true, true);
-			return j == 0 && l > 0 ? this.blockEngine.runUpdates(l, true, true) : l;
+			int l = this.skyEngine.runLightUpdates();
+			return l > 0 ? this.blockEngine.runLightUpdates() : l;
 		} else if (block) {
-			return this.blockEngine.runUpdates(maxUpdates, true, runSky);
+			return this.blockEngine.runLightUpdates();
 		} else if (sky) {
-			return this.skyEngine.runUpdates(maxUpdates, runBlock, true);
+			return this.skyEngine.runLightUpdates();
 		}
-		return maxUpdates;
+		return 2000;
 	}
 	
 	@Override
@@ -74,11 +63,6 @@ public class NotThreadedSULightManager extends ThreadedLevelLightEngine {
 	
 	@Override
 	public void tryScheduleUpdate() {
-	}
-
-	@Override
-	public void setTaskPerBatch(int pTaskPerBatch) {
-		super.setTaskPerBatch(pTaskPerBatch);
 	}
 
 	@Override

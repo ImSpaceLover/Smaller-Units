@@ -18,7 +18,7 @@ public class ServerPlayerMixin {
 		if (info != null) {
 			screenAttachments.update((Player) (Object) this);
 			info.scalePlayerReach(((Player) (Object) this), screenAttachments.getDescriptor().getReachScale());
-			info.adjust((Player) (Object) this, ((Player) (Object) this).getLevel(), screenAttachments.getDescriptor(), true);
+			info.adjust((Player) (Object) this, ((Player) (Object) this).level(), screenAttachments.getDescriptor(), true);
 		}
 	}
 	

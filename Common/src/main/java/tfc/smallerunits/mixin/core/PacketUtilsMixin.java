@@ -26,14 +26,14 @@ public class PacketUtilsMixin {
 	// optifine moment
 	// for some reason, optifine renames this lambda and reverses the parameter order
 	@SuppressWarnings("MixinAnnotationTarget")
-	@Inject(at = @At("HEAD"), method = {"lambda$checkThreadAndEnqueue$0"}, require = 0, remap = false)
-	private static <T extends PacketListener> void preHandlePacketOF(Packet packet, PacketListener listener, CallbackInfo ci) {
+	@Inject(at = @At("HEAD"), method = {"lambda$ensureRunningOnSameThread$0"}, require = 0, remap = false)
+	private static <T extends PacketListener> void preHandlePacketOF(PacketListener listener, Packet packet, CallbackInfo ci) {
 		PacketUtilMess.preHandlePacket(listener, packet);
 	}
 	
 	@SuppressWarnings("MixinAnnotationTarget")
-	@Inject(at = @At("RETURN"), method = {"lambda$checkThreadAndEnqueue$0"}, require = 0, remap = false)
-	private static <T extends PacketListener> void postHandlePacketOF(Packet packet, PacketListener listener, CallbackInfo ci) {
+	@Inject(at = @At("RETURN"), method = {"lambda$ensureRunningOnSameThread$0"}, require = 0, remap = false)
+	private static <T extends PacketListener> void postHandlePacketOF(PacketListener listener, Packet packet, CallbackInfo ci) {
 		PacketUtilMess.postHandlePacket(listener, packet);
 	}
 }

@@ -36,10 +36,10 @@ public class BlockableEventLoopMixin {
 			NetworkingHacks.setPos(descriptor);
 			NetworkingHacks.currentContext.set(nhcontext);
 			
-			Level preHandleLevel = context.player.level;
+			Level preHandleLevel = context.player.level();
 			
-			if (context.player.level != nhcontext.targetLevel)
-				info.adjust(context.player, context.player.level, descriptor, direction == NetworkDirection.TO_SERVER);
+			if (context.player.level() != nhcontext.targetLevel)
+				info.adjust(context.player, context.player.level(), descriptor, direction == NetworkDirection.TO_SERVER);
 			
 			Object old = null;
 			boolean toServer = direction == NetworkDirection.TO_SERVER;
@@ -49,7 +49,7 @@ public class BlockableEventLoopMixin {
 			int upb = 0;
 			if (preHandleLevel instanceof ITickerLevel tl) upb = tl.getUPB();
 			// TODO: debug this garbage
-			((PacketListenerAccessor) networkManager.getPacketListener()).setWorld(context.player.level);
+			((PacketListenerAccessor) networkManager.getPacketListener()).setWorld(context.player.level());
 			
 			try {
 				value.run(); // run deferred work
@@ -62,14 +62,14 @@ public class BlockableEventLoopMixin {
 				Object newV = context.player.containerMenu;
 				if (old != newV) {
 					if (newV != context.player.inventoryMenu) {
-						((SUScreenAttachments) newV).setup(info, context.player.level, descriptor);
+						((SUScreenAttachments) newV).setup(info, context.player.level(), descriptor);
 					}
 				}
 			} else {
 				Object newV = IHateTheDistCleaner.getScreen();
 				if (old != newV) {
 					if (newV != null) {
-						((SUScreenAttachments) newV).setup(info, context.player.level, descriptor);
+						((SUScreenAttachments) newV).setup(info, context.player.level(), descriptor);
 					}
 				}
 			}

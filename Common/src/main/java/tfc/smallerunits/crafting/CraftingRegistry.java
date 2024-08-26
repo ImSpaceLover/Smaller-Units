@@ -1,7 +1,7 @@
 package tfc.smallerunits.crafting;
 
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleRecipeSerializer;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import tfc.smallerunits.plat.PlatformRegistry;
 
 import java.util.function.Supplier;
@@ -10,6 +10,6 @@ import java.util.function.Supplier;
 public class CraftingRegistry {
 	public static final PlatformRegistry<RecipeSerializer<?>> RECIPES = new PlatformRegistry(RecipeSerializer.class, "smallerunits");
 	
-	public static final Supplier<RecipeSerializer<UnitResizingRecipe>> SIZING = (Supplier<RecipeSerializer<UnitResizingRecipe>>) (Object) RECIPES.register("su_resizing", () -> new SimpleRecipeSerializer<>(UnitResizingRecipe::new));
+	public static final Supplier<RecipeSerializer<UnitResizingRecipe>> SIZING = (Supplier<RecipeSerializer<UnitResizingRecipe>>) (Object) RECIPES.register("su_resizing", () -> new SimpleCraftingRecipeSerializer(UnitResizingRecipe::new));
 //	public static final RegistryObject<RecipeSerializer<SUTileRecipe>> TILE = RECIPES.register("su_tile", () -> new SimpleRecipeSerializer<>(SUTileRecipe::new));
 }

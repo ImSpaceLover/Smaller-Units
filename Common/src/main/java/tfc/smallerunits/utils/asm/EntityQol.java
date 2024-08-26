@@ -106,7 +106,7 @@ public class EntityQol {
 		AABB box = HitboxScaling.getOffsetAndScaledBox(entity.getBoundingBox(), entity.getPosition(0), ((ITickerLevel) level).getUPB(), regionPos);
 		double d0 = box.minY + (entity.getEyeHeight() * ((ITickerLevel) level).getUPB());
 		Vec3 vec = box.getCenter();
-		BlockPos blockpos = new BlockPos(vec.x, d0, vec.z);
+		BlockPos blockpos = new BlockPos((int) vec.x, (int) d0, (int) vec.z);
 		FluidState fluidstate = level.getFluidState(blockpos);
 		double d1 = (float) blockpos.getY() + fluidstate.getHeight(level, blockpos);
 		if (d1 > d0) {
@@ -119,7 +119,7 @@ public class EntityQol {
 		AABB box = HitboxScaling.getOffsetAndScaledBox(entity.getBoundingBox(), entity.getPosition(0), ((ITickerLevel) level).getUPB(), regionPos);
 		double d0 = box.minY;
 		Vec3 vec = box.getCenter();
-		BlockPos blockpos = new BlockPos(vec.x, d0, vec.z);
+		BlockPos blockpos = new BlockPos((int) vec.x, (int) d0, (int) vec.z);
 		return level.getBlockState(blockpos);
 	}
 }

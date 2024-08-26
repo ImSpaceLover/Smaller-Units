@@ -6,14 +6,9 @@
   "refmap": "smallerunits.refmap.json",
   "plugin": "tfc.smallerunits.plat.asm.MixinConnector",
   "mixins": [
-    "compat.cc.ComputerUIMixin",
-    "compat.cc.NetworkHandlerMixin",
     "compat.chisel_and_bits.ChiselAndBitsMeshMixin",
     "compat.optimization.canary.CanaryEntityCollisionsMixin",
     "compat.optimization.canary.CollisionSweeperMixin",
-    "compat.optimization.flywheel.CModCompatMixin",
-    "compat.optimization.flywheel.LevelRendererMixin",
-    "compat.optimization.flywheel.ModCompatMixin",
     "compat.storage.ae2.IWishThisArrayCouldntBeAccessed",
     "compat.storage.integrated_dynamics.DimPosMixin",
     "compat.storage.integrated_dynamics.PacketCodecMixin",
@@ -27,7 +22,6 @@
   ],
   "client": [
     "compat.distant_horizons.ForgeClientProxyMixin",
-    "compat.optimization.flywheel.TickerClientLevelMixin",
     "core.LevelRendererMixinForge",
     "core.gui.client.ForgeHooksClientMixin",
     "core.gui.client.KeyboardHandlerMixin",

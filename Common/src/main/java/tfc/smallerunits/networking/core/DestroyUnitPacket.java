@@ -44,7 +44,7 @@ public class DestroyUnitPacket extends Packet {
 	public void handle(NetCtx ctx) {
 		if (checkServer(ctx)) {
 			Player player = ctx.getSender();
-			Level lvl = ctx.getSender().level;
+			Level lvl = ctx.getSender().level();
 			((UnitSpaceBlock) Registry.UNIT_SPACE.get()).destroy(
 					lvl.getBlockState(result.getBlockPos()),
 					lvl, result.getBlockPos(), player,

@@ -17,7 +17,7 @@ public class TileResizingItem extends Item {
 	private final int scale;
 	
 	public TileResizingItem(int scale) {
-		super(new Item.Properties().stacksTo(1).tab(Registry.tab));
+		super(new Item.Properties().stacksTo(1));
 		this.scale = scale;
 	}
 	
@@ -30,7 +30,7 @@ public class TileResizingItem extends Item {
 		if (GameplayOptions.resizeOther) {
 			if (ResizingUtils.isResizingModPresent()) {
 				if (target instanceof Player && attacker instanceof ServerPlayer) {
-					((ServerPlayer) attacker).getAdvancements().award(((ServerPlayer) attacker).getLevel().getServer().getAdvancements().getAdvancement(new ResourceLocation("smallerunits:rude")), "strike_player");
+					((ServerPlayer) attacker).getAdvancements().award(((ServerPlayer) attacker).level().getServer().getAdvancements().getAdvancement(new ResourceLocation("smallerunits:rude")), "strike_player");
 				}
 			}
 			ResizingUtils.resize(target, getScale());

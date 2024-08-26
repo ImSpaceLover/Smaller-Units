@@ -2,8 +2,6 @@ package tfc.smallerunits.client.render;
 
 import com.mojang.blaze3d.vertex.*;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.coderbot.iris.block_rendering.BlockRenderingSettings;
-import net.coderbot.iris.vertices.BlockSensitiveBufferBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
@@ -34,7 +32,6 @@ import tfc.smallerunits.utils.storage.DefaultedMap;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
 public class SUVBOEmitter {
 	private static final ArrayList<BufferStorage> vbosFree = new ArrayList<>();
@@ -107,37 +104,16 @@ public class SUVBOEmitter {
 		return storage;
 	}
 	
-	protected static boolean irisPresent =
-			PlatformUtils.isLoaded("oculus") ||
-					PlatformUtils.isLoaded("iris");
-	
-	protected static void beginBlock(VertexConsumer consumer, BlockPos pos, BlockState block, Object2IntMap<BlockState> map, boolean isFluid) {
-		if (irisPresent) {
-			((BlockSensitiveBufferBuilder) consumer).beginBlock(
-					(short) (map == null ? -1 : map.getOrDefault(isFluid ? block.getFluidState().createLegacyBlock() : block, -1)),
-					(short) -1,
-					pos.getX() & 15, pos.getY() & 15, pos.getZ() & 15
-			);
-		}
-	}
-	
-	private void endBlock(VertexConsumer consumer) {
-		if (irisPresent) {
-			((BlockSensitiveBufferBuilder) consumer).endBlock();
-		}
-	}
-	
 	private void handleLayer(RenderType chunkBufferLayer, DefaultedMap<RenderType, BufferBuilder> buffers, RenderWorld wld, PoseStack stack, int upb, UnitSpace space, BlockRenderDispatcher dispatcher, BlockState[] states) {
 		Object2IntMap<BlockState> map = null;
-		if (irisPresent) map = BlockRenderingSettings.INSTANCE.getBlockStateIds();
 		
 		VertexConsumer consumer = null;
 		TranslatingVertexBuilder vertexBuilder = null;
 		SectionPos chunkPos = SectionPos.of(new BlockPos(space.pos.getX() & 511, space.pos.getY() & 511, space.pos.getZ() & 511));
 		BlockPos chunkOffset = new BlockPos(chunkPos.minBlockX(), chunkPos.minBlockY(), chunkPos.minBlockZ());
 		PoseStack stk = new PoseStack();
-		stk.last().pose().load(stack.last().pose());
-		stk.last().normal().load(stack.last().normal());
+		stk.last().pose().get(stack.last().pose());
+		stk.last().normal().get(stack.last().normal());
 		BlockPos.MutableBlockPos blockPosMut = new BlockPos.MutableBlockPos();
 		
 		for (int x = 0; x < upb; x++) {
@@ -167,12 +143,10 @@ public class SUVBOEmitter {
 									(Math1D.getChunkOffset(offsetPos.getY(), 16)) * 16 - chunkOffset.getY() * space.unitsPerBlock,
 									(Math1D.getChunkOffset(offsetPos.getZ(), 16)) * 16 - chunkOffset.getZ() * space.unitsPerBlock
 							);
-							beginBlock(consumer, offsetPos, block, map, true);
 							dispatcher.renderLiquid(
 									offsetPos, wld, vertexBuilder,
 									block, fluid
 							);
-							endBlock(consumer);
 						}
 					}
 					
@@ -184,8 +158,7 @@ public class SUVBOEmitter {
 							if (consumer == null) consumer = buffers.get(chunkBufferLayer);
 							stk.pushPose();
 							stk.translate(x, y, z);
-							
-							beginBlock(consumer, offsetPos, block, map, false);
+
 							PlatformUtils.tesselate(dispatcher,
 									wld, dispatcher.getBlockModel(block),
 									block, offsetPos, stk,
@@ -194,8 +167,6 @@ public class SUVBOEmitter {
 									0, 0,
 									modelData, chunkBufferLayer
 							);
-							endBlock(consumer);
-							
 							stk.popPose();
 						}
 					}

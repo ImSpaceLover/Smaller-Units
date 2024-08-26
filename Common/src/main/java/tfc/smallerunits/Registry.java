@@ -14,7 +14,6 @@ public class Registry {
 	public static final PlatformRegistry<Item> ITEM_REGISTER = new PlatformRegistry(Item.class, "smallerunits");
 	public static final Supplier<Item> UNIT_SPACE_ITEM = ITEM_REGISTER.register("unit_space", UnitSpaceItem::new);
 	public static final Supplier<Item> SHRINKER = ITEM_REGISTER.register("su_shrinker", () -> new TileResizingItem(-1));
-	public static final CreativeModeTab tab = PlatformUtils.tab("Smaller Units", SHRINKER);
 	public static final Supplier<Item> GROWER = ITEM_REGISTER.register("su_grower", () -> new TileResizingItem(1));
 	
 	public static final Supplier<Block> UNIT_SPACE = BLOCK_REGISTER.register("unit_space", UnitSpaceBlock::new);

@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
-    id 'fabric-loom' version '1.2-SNAPSHOT'
+    id 'fabric-loom' version '0.12-SNAPSHOT'
 }
 
 base {
@@ -50,23 +50,18 @@ dependencies {
 
     implementation group: 'com.google.code.findbugs', name: 'jsr305', version: '3.0.1'
 
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.0.2"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.0.2"
-    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:5.0.2"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-base:5.2.2"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-world:5.2.2"
+    modImplementation "dev.onyxstudios.cardinal-components-api:cardinal-components-chunk:5.2.2"
     include(modImplementation "com.jamieswhiteshirt:reach-entity-attributes:2.3.0")
-    modImplementation "curse.maven:pehkui-319596:4641062"
+    modImplementation "curse.maven:pehkui-319596:4684391"
     modImplementation 'com.github.Virtuoel:KanosConfig:0.4.1'
 
-    modCompileOnly "curse.maven:oculus-581495:4763262"
-    modCompileOnly "maven.modrinth:lithium:mc1.19.2-0.11.1"
-    modCompileOnly "curse.maven:distant-horizons-508933:4924658"
+    modCompileOnly "maven.modrinth:lithium:mc1.20.1-0.11.2"
+    modCompileOnly "curse.maven:distant-horizons-508933:5649758"
 
-    modCompileOnly "com.jozufozu.flywheel:flywheel-fabric-1.19.2:0.6.9-6"
-
-//    modImplementation "curse.maven:cc-restitched-462672:3908334"
-
-    // cc:restitched
-    modImplementation('com.github.cc-tweaked:cc-restitched:v1.19.1-1.101.2-ccr')
+    // cc:tweaked - cc:restitched died :>
+    modImplementation "curse.maven:cc-tweaked-282001:5644985"
 
     compileOnly project(":Common")
 }

@@ -68,10 +68,10 @@ public class UnitEdge extends Block implements IContextAwarePickable {
 			int upb = tickerLevel.getUPB();
 			BlockPos bp = region.pos.toBlockPos().offset(
 					// TODO: double check this
-					Math.floor(pPos.getX() / (double) upb),
-					Math.floor(pPos.getY() / (double) upb),
-					Math.floor(pPos.getZ() / (double) upb)
-			);
+                    (int) Math.floor(pPos.getX() / (double) upb),
+                    (int) Math.floor(pPos.getY() / (double) upb),
+                    (int) Math.floor(pPos.getZ() / (double) upb)
+            );
 			
 			BlockState state = tickerLevel.getParent().getBlockState(bp);
 			pLevel.levelEvent(pPlayer, 2001, pPos, getId(state));

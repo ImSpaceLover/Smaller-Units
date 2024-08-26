@@ -5,12 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.SectionPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ChunkMap;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -19,7 +15,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkAccess;
 import net.minecraft.world.level.chunk.ChunkStatus;
 import net.minecraft.world.level.chunk.LevelChunkSection;
-import qouteall.imm_ptl.core.network.PacketRedirection;
 import tfc.smallerunits.client.render.util.RenderWorld;
 import tfc.smallerunits.data.capability.ISUCapability;
 import tfc.smallerunits.data.capability.SUCapabilityManager;
@@ -31,7 +26,6 @@ import tfc.smallerunits.logging.Loggers;
 import tfc.smallerunits.networking.SUNetworkRegistry;
 import tfc.smallerunits.networking.sync.RemoveUnitPacketS2C;
 import tfc.smallerunits.networking.sync.SyncPacketS2C;
-import tfc.smallerunits.plat.net.NetworkDirection;
 import tfc.smallerunits.plat.net.PacketTarget;
 import tfc.smallerunits.plat.util.PlatformUtils;
 import tfc.smallerunits.simulation.chunk.BasicVerticalChunk;
@@ -427,23 +421,6 @@ public class UnitSpace {
 	public void sendRemove(PacketTarget target) {
 		RemoveUnitPacketS2C pkt = new RemoveUnitPacketS2C(this.pos, this.unitsPerBlock);
 		SUNetworkRegistry.NETWORK_INSTANCE.send(target, pkt);
-	}
-	
-	// ip compatibility method
-	public void sendRedirectableSync(ServerPlayer target) {
-		SyncPacketS2C pkt = new SyncPacketS2C(this);
-		if (SmallerUnits.isImmersivePortalsPresent()) {
-			if (PacketRedirection.getForceRedirectDimension() != null) {
-				//noinspection unchecked
-				PacketRedirection.sendRedirectedPacket(
-						(ServerGamePacketListenerImpl) target.connection.connection.getPacketListener(),
-						(Packet<ClientGamePacketListener>) SUNetworkRegistry.NETWORK_INSTANCE.toVanillaPacket(pkt, NetworkDirection.TO_CLIENT),
-						PacketRedirection.getForceRedirectDimension()
-				);
-			}
-		} else {
-			SUNetworkRegistry.NETWORK_INSTANCE.send(PacketTarget.player(target), pkt);
-		}
 	}
 	
 	public void removeState(BlockState block) {

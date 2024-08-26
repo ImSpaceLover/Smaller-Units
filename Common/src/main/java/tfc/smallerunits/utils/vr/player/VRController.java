@@ -1,13 +1,13 @@
 package tfc.smallerunits.utils.vr.player;
 
-import com.mojang.math.Quaternion;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
 
 public class VRController {
 	Vec3 position;
-	Quaternion quaternion;
+	Quaternionf quaternion;
 	
-	public VRController(Vec3 position, Quaternion quaternion) {
+	public VRController(Vec3 position, Quaternionf quaternion) {
 		this.position = position;
 		this.quaternion = quaternion;
 	}
@@ -16,7 +16,7 @@ public class VRController {
 		return position;
 	}
 	
-	public Quaternion getQuaternion() {
-		return quaternion.copy();
+	public Quaternionf getQuaternion() {
+		return quaternion.identity();
 	}
 }

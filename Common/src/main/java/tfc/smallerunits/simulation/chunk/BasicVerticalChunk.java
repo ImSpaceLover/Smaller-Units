@@ -5,6 +5,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
 import net.minecraft.core.SectionPos;
 import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.FullChunkStatus;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -757,9 +758,9 @@ public class BasicVerticalChunk extends LevelChunk {
 	public ChunkStatus getStatus() {
 		return ChunkStatus.FULL;
 	}
-	
+
 	@Override
-	public ChunkHolder.FullChunkStatus getFullStatus() {
-		return ChunkHolder.FullChunkStatus.TICKING;
+	public FullChunkStatus getFullStatus() {
+		return FullChunkStatus.FULL;
 	}
 }

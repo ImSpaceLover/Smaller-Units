@@ -16,7 +16,7 @@ public class ServerPacketListenerMixin implements PacketListenerAccessor {
 	
 	@Override
 	public void setWorld(Level lvl) {
-		this.player.setLevel((ServerLevel) lvl);
+		this.player.setServerLevel((ServerLevel) lvl);
 	}
 	
 	@Override

@@ -2,7 +2,6 @@ package tfc.smallerunits.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -19,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tfc.smallerunits.SmallerUnits;
 import tfc.smallerunits.client.abstraction.IFrustum;
@@ -245,7 +245,7 @@ public class TileRendererHelper {
 		stk.popPose();
 		
 		if (builder != null) {
-			buffers[upb - 1] = new VertexBuffer();
+			buffers[upb - 1] = new VertexBuffer(VertexBuffer.Usage.DYNAMIC);
 			buffers[upb - 1].bind();
 			buffers[upb - 1].upload(builder.end());
 			DefaultVertexFormat.POSITION_COLOR.setupBufferState();
@@ -304,9 +304,9 @@ public class TileRendererHelper {
 	
 	private static VertexConsumer vertex(VertexConsumer consumer, Matrix4f mat, float x, float y, float z) {
 		float w = 1.0F;
-		float tx = mat.m00 * x + mat.m01 * y + mat.m02 * z + mat.m03 * w;
-		float ty = mat.m10 * x + mat.m11 * y + mat.m12 * z + mat.m13 * w;
-		float tz = mat.m20 * x + mat.m21 * y + mat.m22 * z + mat.m23 * w;
+		float tx = mat.m00() * x + mat.m01() * y + mat.m02() * z + mat.m03() * w;
+		float ty = mat.m10() * x + mat.m11() * y + mat.m12() * z + mat.m13() * w;
+		float tz = mat.m20() * x + mat.m21() * y + mat.m22() * z + mat.m23() * w;
 		
 		return consumer.vertex(tx, ty, tz);
 	}
@@ -318,7 +318,7 @@ public class TileRendererHelper {
 		float scl = 1f / (((TickerClientLevel) valueLevel).getUPB());
 		
 		PoseStack stack = new PoseStack();
-		stack.last().pose().multiply(pPoseStack.last().pose());
+		stack.last().pose().mul(pPoseStack.last().pose());
 		
 		if (!SmallerUnits.isSodiumPresent()) SmallerUnits.tesselScale = scl;
 		
@@ -355,7 +355,7 @@ public class TileRendererHelper {
 				VertexConsumer consumer = renderBuffers.crumblingBufferSource().getBuffer(ModelBakery.DESTROY_TYPES.get(progr));
 				int upb = ((ITickerLevel) level).getUPB();
 				consumer = new TextureScalingVertexBuilder(consumer, upb);
-				VertexConsumer vertexconsumer1 = new SheetedDecalTextureGenerator(consumer, posestack$pose.pose(), posestack$pose.normal());
+				VertexConsumer vertexconsumer1 = new SheetedDecalTextureGenerator(consumer, posestack$pose.pose(), posestack$pose.normal(), 0);
 				pPoseStack.pushPose();
 				float scl = 1f / upb;
 				pPoseStack.scale(scl, scl, scl);

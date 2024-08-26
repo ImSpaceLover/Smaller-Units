@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.PacketListener;
@@ -53,7 +54,7 @@ public class PlatformUtils {
 	}
 	
 	public static ResourceLocation getRegistryName(BlockEntity be) {
-		return Registry.BLOCK_ENTITY_TYPE.getKey(be.getType());
+		return Registries.BLOCK_ENTITY_TYPE.registry();
 	}
 
 //	public static double getReach(LivingEntity entity, double reach) {
@@ -89,7 +90,7 @@ public class PlatformUtils {
 	}
 	
 	public static double getStepHeight(LocalPlayer player) {
-		return player.maxUpStep;
+		return player.maxUpStep();
 	}
 
 //	public static CompoundTag getCapTag(Object level) {

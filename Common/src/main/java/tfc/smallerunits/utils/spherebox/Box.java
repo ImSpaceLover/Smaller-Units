@@ -1,19 +1,19 @@
 package tfc.smallerunits.utils.spherebox;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector4f;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector4f;
 import tfc.smallerunits.utils.selection.MutableVec3;
 
 public class Box {
 	Vec3[] points;
-	Quaternion quaternion;
+	Quaternionf quaternion;
 	AABB lsBounds;
 	AABB wsBounds;
 	Vec3 offset;
 	
-	public Box(Vec3[] points, Quaternion quaternion, Vector4f worker, Vec3 offset) {
+	public Box(Vec3[] points, Quaternionf quaternion, Vector4f worker, Vec3 offset) {
 		this.points = points;
 		this.quaternion = quaternion;
 		this.offset = offset;
@@ -21,9 +21,9 @@ public class Box {
 	}
 	
 	public void lsVec(Vec3 other, Vector4f dst) {
-		quaternion.conj();
+		quaternion.conjugate();
 		VecMath.rotate(other, quaternion, dst);
-		quaternion.conj();
+		quaternion.conjugate();
 	}
 	
 	public void calcAABB(Vector4f worker) {

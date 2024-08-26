@@ -39,7 +39,7 @@ public abstract class CameraMixin {
 	@Unique
 	private void SU$runPerWorld(BiConsumer<Level, RegionPos> action) {
 		Vec3 position = getPosition();
-		RegionPos regionPos = new RegionPos(new BlockPos(position));
+		RegionPos regionPos = new RegionPos(new BlockPos((int) position.x, (int) position.y, (int) position.z));
 		Region region = ((RegionalAttachments) level).SU$getRegionMap().get(regionPos);
 		if (region != null) {
 			for (Level regionLevel : region.getLevels()) {

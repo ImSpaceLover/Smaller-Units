@@ -20,8 +20,6 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import org.jetbrains.annotations.Nullable;
-import qouteall.imm_ptl.core.chunk_loading.NewChunkTrackingGraph;
-import qouteall.imm_ptl.core.network.PacketRedirection;
 import tfc.smallerunits.SmallerUnits;
 import tfc.smallerunits.api.PositionUtils;
 import tfc.smallerunits.data.access.ChunkHolderAccessor;
@@ -115,14 +113,12 @@ public class UnitChunkHolder extends ChunkHolder {
 					if (shortset.size() == 1) {
 						BlockPos blockpos = sectionpos.relativeToBlockPos(shortset.iterator().nextShort());
 						BlockState blockstate = level.getBlockState(blockpos);
-						compatBroadcast(new ClientboundBlockUpdatePacket(blockpos, blockstate), false);
-						this.broadcastBlockEntityIfNeeded(level, blockpos, blockstate);
+						this.broadcastChanges(new LevelChunk(level, new ChunkPos(blockpos.getX() * 16, blockpos.getZ() * 16)));
 					} else {
 						LevelChunkSection levelchunksection = pChunk.getSection(yPos);
-						ClientboundSectionBlocksUpdatePacket clientboundsectionblocksupdatepacket = new ClientboundSectionBlocksUpdatePacket(sectionpos, shortset, levelchunksection, false);
-						compatBroadcast(clientboundsectionblocksupdatepacket, false);
+						ClientboundSectionBlocksUpdatePacket clientboundsectionblocksupdatepacket = new ClientboundSectionBlocksUpdatePacket(sectionpos, shortset, levelchunksection);
 						clientboundsectionblocksupdatepacket.runUpdates((p_140078_, p_140079_) -> {
-							this.broadcastBlockEntityIfNeeded(level, p_140078_, p_140079_);
+							this.broadcastChanges(new LevelChunk(level, new ChunkPos(p_140078_.getX() * 16, p_140078_.getZ() * 16)));
 						});
 					}
 					
@@ -131,37 +127,6 @@ public class UnitChunkHolder extends ChunkHolder {
 			}
 			
 			this.hasChangedSections = false;
-		}
-	}
-	
-	protected void compatBroadcast(Packet<?> packet, boolean bl) {
-		if (SmallerUnits.isImmersivePortalsPresent()) {
-			if (packet == null) return;
-
-			ChunkPos pos = getPos();
-
-			BlockPos bp = PositionUtils.getParentPos(pos.getWorldPosition(), (ITickerLevel) chunk.level);
-			pos = new ChunkPos(bp);
-
-			ResourceKey<Level> dimension = chunk.level.dimension();
-			Packet<?> wrappedPacket = packet;
-			Consumer<ServerPlayer> func = player -> PacketRedirection.sendRedirectedMessage(player, dimension, wrappedPacket);
-			Stream<ServerPlayer> players;
-//			NetworkingHacks.LevelDescriptor descriptor = NetworkingHacks.unitPos.get();
-//			NetworkingHacks.unitPos.set(null);
-			if (bl) {
-				players = NewChunkTrackingGraph.getFarWatchers(dimension, pos.x, pos.z);
-			} else {
-				players = NewChunkTrackingGraph.getPlayersViewingChunk(dimension, pos.x, pos.z);
-			}
-			players.forEach(func);
-//			NetworkingHacks.unitPos.set(descriptor);
-		} else {
-			if (packet == null) {
-				Loggers.SU_LOGGER.warn("what");
-				return;
-			}
-			((ChunkHolderAccessor) this).SU$call_broadcast(packet, bl);
 		}
 	}
 }

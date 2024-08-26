@@ -18,7 +18,6 @@ import tfc.smallerunits.data.access.PacketListenerAccessor;
 import tfc.smallerunits.networking.SUNetworkRegistry;
 import tfc.smallerunits.networking.hackery.WrapperPacket;
 import tfc.smallerunits.plat.net.PacketTarget;
-import tfc.smallerunits.utils.asm.IPCompat;
 
 @Mixin(Connection.class)
 public abstract class ConnectionMixin {
@@ -44,10 +43,6 @@ public abstract class ConnectionMixin {
 		
 		if (!isSending.get()) {
 			isSending.set(true);
-			if (SmallerUnits.isImmersivePortalsPresent() && this.receiving.equals(PacketFlow.SERVERBOUND)) {
-				if (IPCompat.runPacketModifications(packet, isSending, ci))
-					return;
-			}
 			packet = maybeWrap(packet, this.receiving.getOpposite());
 			if (packet instanceof WrapperPacket) {
 				if (this.receiving.equals(PacketFlow.SERVERBOUND)) {

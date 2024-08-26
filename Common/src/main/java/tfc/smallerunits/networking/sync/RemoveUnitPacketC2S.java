@@ -42,7 +42,7 @@ public class RemoveUnitPacketC2S extends Packet {
 				reach += 1; // TODO: do this a bit better, helps account for player scaling
 				Vec3 pos = ctx.getSender().getPosition(0);
 				if (Math.sqrt(pos.distanceToSqr(position.getX() + 0.5, position.getY() + 0.5, position.getZ() + 0.5)) < reach) {
-					Level lvl = ctx.getSender().getLevel();
+					Level lvl = ctx.getSender().level();
 					LevelChunk chunk = lvl.getChunkAt(position);
 					//noinspection ConstantConditions
 					if (chunk == null || chunk instanceof EmptyLevelChunk) {
@@ -56,7 +56,7 @@ public class RemoveUnitPacketC2S extends Packet {
 					}
 					UnitSpace space = cap.getUnit(position);
 					if (space != null && space.isEmpty())
-						ctx.getSender().getLevel().removeBlock(position, false);
+						ctx.getSender().level().removeBlock(position, false);
 					else
 						Loggers.SU_LOGGER.warn(ctx.getSender().getName().getString() + " tried to remove a non-empty unit space");
 				} else {

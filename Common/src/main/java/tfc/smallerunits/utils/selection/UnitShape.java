@@ -682,10 +682,10 @@ public class UnitShape extends VoxelShape {
 							BooleanOp.AND
 					)) {
 						BlockPos pos = new BlockPos(
-								up.getStepX() * u.x + right.getStepX() * r.x,
-								up.getStepY() * u.y + right.getStepY() * r.y,
-								up.getStepZ() * u.z + right.getStepZ() * r.z
-						);
+                                (int) (up.getStepX() * u.x + right.getStepX() * r.x),
+                                (int) (up.getStepY() * u.y + right.getStepY() * r.y),
+                                (int) (up.getStepZ() * u.z + right.getStepZ() * r.z)
+                        );
 						
 						switch (value) {
 							case UP -> pos = pos.above(space.unitsPerBlock);

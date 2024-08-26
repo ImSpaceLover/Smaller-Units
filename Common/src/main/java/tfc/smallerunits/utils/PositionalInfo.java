@@ -42,14 +42,14 @@ public class PositionalInfo {
 
 	public PositionalInfo(Entity pEntity, boolean cacheParticleEngine) {
 		pos = new Vec3(pEntity.getX(), pEntity.getY(), pEntity.getZ());
-		lvl = pEntity.level;
+		lvl = pEntity.level();
 		box = pEntity.getBoundingBox();
 		eyeHeight = pEntity.eyeHeight;
 		oPos = new Vec3(pEntity.xo, pEntity.yo, pEntity.zo);
 		oldPos = new Vec3(pEntity.xOld, pEntity.yOld, pEntity.zOld);
 		Level clvl = null;
 		if (PlatformUtils.isClient()) {
-			if (pEntity.getLevel().isClientSide) {
+			if (pEntity.level().isClientSide) {
 				if (pEntity instanceof Player player) {
 					if (cacheParticleEngine) {
 						particleEngine = IHateTheDistCleaner.getParticleEngine(player);
@@ -89,14 +89,14 @@ public class PositionalInfo {
 		}
 		if (descriptor.parent() != null) adjust(pEntity, parent, descriptor.parent(), server);
 
-		RegionalAttachments attachments = (RegionalAttachments) pEntity.level;
+		RegionalAttachments attachments = (RegionalAttachments) pEntity.level();
 		Region region = attachments.SU$getRegion(descriptor.pos());
 		if (region == null) return;
 		Level spaceLevel;
 		if (server)
-			spaceLevel = region.getServerWorld(pEntity.getServer(), (ServerLevel) pEntity.getLevel(), descriptor.upb());
+			spaceLevel = region.getServerWorld(pEntity.getServer(), (ServerLevel) pEntity.level(), descriptor.upb());
 		else
-			spaceLevel = region.getClientWorld(pEntity.getLevel(), descriptor.upb());
+			spaceLevel = region.getClientWorld(pEntity.level(), descriptor.upb());
 
 		adjust(pEntity, spaceLevel, descriptor.upb(), descriptor.pos(), false);
 	}
@@ -122,14 +122,12 @@ public class PositionalInfo {
 		pEntity.yOld = HitboxScaling.scaleY((ITickerLevel) level, pEntity.yOld);
 		pEntity.zOld = HitboxScaling.scaleZ((ITickerLevel) level, pEntity.zOld);
 
-		pEntity.level = level;
-
-		ITickerLevel tkLvl = (ITickerLevel) pEntity.level;
+		ITickerLevel tkLvl = (ITickerLevel) pEntity.level();
 		tkLvl.addInteractingEntity(pEntity);
 	}
 
 	public void reset(Entity pEntity) {
-		if (pEntity.level instanceof ITickerLevel tkLvl) {
+		if (pEntity.level() instanceof ITickerLevel tkLvl) {
 			if (pEntity instanceof Player player) {
 				tkLvl.ungrab(player);
 			}
@@ -143,8 +141,8 @@ public class PositionalInfo {
 				isReachSet = false;
 			}
 		}
-		pEntity.level = lvl;
-		if (pEntity.getLevel().isClientSide) {
+
+		if (pEntity.level().isClientSide) {
 			if (pEntity instanceof Player player) {
 				resetClient(player);
 			}
@@ -162,7 +160,7 @@ public class PositionalInfo {
 
 	public void resetClient(Player player) {
 		if (PlatformUtils.isClient()) {
-			if (player.level.isClientSide) {
+			if (player.level().isClientSide) {
 				IHateTheDistCleaner.resetClient(player, lvl, particleEngine);
 				if (clientLevel != null) IHateTheDistCleaner.setClientLevel(clientLevel);
 			}
@@ -171,7 +169,7 @@ public class PositionalInfo {
 
 	public void setupClient(Player player, Level spaceLevel, boolean updateParticleEngine) {
 		if (PlatformUtils.isClient()) {
-			if (player.level.isClientSide) {
+			if (player.level().isClientSide) {
 				Object o = IHateTheDistCleaner.adjustClient(player, spaceLevel, particleEngine != null);
 			}
 		}

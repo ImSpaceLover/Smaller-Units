@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.PacketListener;
@@ -72,7 +73,7 @@ public class PlatformUtils {
 	}
 	
 	public static ResourceLocation getRegistryName(BlockEntity be) {
-		return Registry.BLOCK_ENTITY_TYPE.getKey(be.getType());
+		return Registries.BLOCK_ENTITY_TYPE.registry();
 	}
 	
 	public static boolean shouldCaptureBlockSnapshots(Level level) {
@@ -80,7 +81,7 @@ public class PlatformUtils {
 	}
 	
 	public static double getStepHeight(LocalPlayer player) {
-		return player.maxUpStep;
+		return player.maxUpStep();
 	}
 
 //	public static CompoundTag getCapTag(Object level) {
@@ -209,13 +210,13 @@ public class PlatformUtils {
 	}
 	
 	public static void chunkLoaded(LevelChunk bvci) {
-		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Load(bvci));
+		MinecraftForge.EVENT_BUS.post(new ChunkEvent.Load(bvci, false));
 	}
 	
 	// reach
 	public static double getReach(LivingEntity entity, double reach) {
-		if (entity.getAttributes().hasAttribute(ForgeMod.REACH_DISTANCE.get()))
-			reach = entity.getAttributeValue(ForgeMod.REACH_DISTANCE.get());
+		if (entity.getAttributes().hasAttribute(ForgeMod.BLOCK_REACH.get()))
+			reach = entity.getAttributeValue(ForgeMod.BLOCK_REACH.get());
 		return reach;
 	}
 	
@@ -224,18 +225,7 @@ public class PlatformUtils {
 	}
 	
 	public static AttributeInstance getReachAttrib(LivingEntity livingEntity) {
-		return livingEntity.getAttribute(ForgeMod.REACH_DISTANCE.get());
-	}
-	
-	// tabs
-	public static CreativeModeTab tab(String name, Supplier<Item> icon) {
-		return new CreativeModeTab(name) {
-			@NotNull
-			@Override
-			public ItemStack makeIcon() {
-				return new ItemStack(icon.get());
-			}
-		};
+		return livingEntity.getAttribute(ForgeMod.BLOCK_REACH.get());
 	}
 	
 	public static void customPayload(ClientboundCustomPayloadPacket clientboundCustomPayloadPacket, Object context, PacketListener listener) {

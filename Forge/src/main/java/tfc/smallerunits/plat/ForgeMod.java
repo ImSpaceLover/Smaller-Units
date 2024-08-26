@@ -117,12 +117,7 @@ public class ForgeMod extends SmallerUnits {
 	}
 	
 	@Override
-	public void registerAtlas(BiConsumer<ResourceLocation, Consumer<ResourceLocation>> onTextureStitch) {
-		modBus.addListener(
-				EventPriority.NORMAL, false,
-				TextureStitchEvent.Pre.class, (ev) -> onTextureStitch.accept(ev.getAtlas().location(), ev::addSprite)
-		);
-	}
+	public void registerAtlas(BiConsumer<ResourceLocation, Consumer<ResourceLocation>> onTextureStitch) {}
 	
 	@Override
 	public void registerChunkStatus(BiConsumer<LevelAccessor, ChunkAccess> onChunkLoaded, BiConsumer<LevelAccessor, ChunkAccess> onChunkUnloaded) {

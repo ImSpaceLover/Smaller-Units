@@ -18,7 +18,7 @@ import tfc.smallerunits.utils.PositionalInfo;
 public class AbstractContainerMenuMixin {
 	@Inject(at = @At("HEAD"), method = "stillValid(Lnet/minecraft/world/inventory/ContainerLevelAccess;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/level/block/Block;)Z", cancellable = true)
 	private static void scale(ContainerLevelAccess $$0, Player $$1, Block $$2, CallbackInfoReturnable<Boolean> cir) {
-		if ($$1.getLevel() instanceof ITickerLevel) {
+		if ($$1.level() instanceof ITickerLevel) {
 			AttributeInstance instance = PlatformUtils.getReachAttrib($$1);
 			if (instance == null) return;
 			AttributeModifier modifier = instance.getModifier(PositionalInfo.SU_REACH_UUID);

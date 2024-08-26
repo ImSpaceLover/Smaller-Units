@@ -10,6 +10,8 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.DataPackConfig;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.*;
+import net.minecraft.world.level.validation.DirectoryValidator;
+import net.minecraft.world.level.validation.PathAllowList;
 import org.jetbrains.annotations.Nullable;
 import sun.misc.Unsafe;
 import tfc.smallerunits.mojangpls.NoPath;
@@ -17,6 +19,7 @@ import tfc.smallerunits.mojangpls.NoPath;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class NoStorageSource extends LevelStorageSource {
@@ -35,7 +38,7 @@ public class NoStorageSource extends LevelStorageSource {
 	}
 	
 	public NoStorageSource(DataFixer p_78201_) {
-		super(new NoPath(), new NoPath(), p_78201_);
+		super(new NoPath(), new NoPath(), new DirectoryValidator(new PathAllowList(new ArrayList<>())), p_78201_);
 	}
 	
 	public static NoStorageSource make() {
@@ -60,10 +63,10 @@ public class NoStorageSource extends LevelStorageSource {
 	}
 	
 	public class UnitStorageAccess extends LevelStorageAccess {
-		public UnitStorageAccess(String p_78276_) throws IOException {
-			super(p_78276_);
+		public UnitStorageAccess(String $$1, Path $$2) throws IOException {
+			super($$1, $$2);
 		}
-		
+
 		@Override
 		public String getLevelId() {
 			return super.getLevelId();
@@ -90,19 +93,7 @@ public class NoStorageSource extends LevelStorageSource {
 			return super.getSummary();
 		}
 		
-		@Nullable
-		@Override
-		public WorldData getDataTag(DynamicOps<Tag> p_211748_, DataPackConfig p_211749_, Lifecycle p_211750_) {
-			return null;
-		}
-		
 		public void readAdditionalLevelSaveData() {
-		}
-		
-		@Nullable
-		@Override
-		public DataPackConfig getDataPacks() {
-			return super.getDataPacks();
 		}
 		
 		@Override

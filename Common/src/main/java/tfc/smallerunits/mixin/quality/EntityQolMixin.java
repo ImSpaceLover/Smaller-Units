@@ -70,7 +70,7 @@ public abstract class EntityQolMixin {
 		if (!(level instanceof RegionalAttachments)) return;
 		if (touchingUnloadedChunk()) return;
 		Vec3 position = getPosition(0);
-		RegionPos regionPos = new RegionPos(new BlockPos(position));
+		RegionPos regionPos = new RegionPos(new BlockPos((int) position.x, (int) position.y, (int) position.z));
 		Region region = ((RegionalAttachments) level).SU$getRegionMap().get(regionPos);
 		if (region != null) {
 			for (Level regionLevel : region.getLevels()) {
@@ -86,7 +86,7 @@ public abstract class EntityQolMixin {
 		if (!(level instanceof RegionalAttachments)) return;
 		if (touchingUnloadedChunk()) return;
 		Vec3 position = getPosition(0);
-		RegionPos regionPos = new RegionPos(new BlockPos(position));
+		RegionPos regionPos = new RegionPos(new BlockPos((int) position.x, (int) position.y, (int) position.z));
 		Region region = ((RegionalAttachments) level).SU$getRegionMap().get(regionPos);
 		if (region != null) {
 			for (Level regionLevel : region.getLevels()) {

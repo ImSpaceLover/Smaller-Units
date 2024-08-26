@@ -1,6 +1,6 @@
 package tfc.smallerunits.client.abstraction;
 
-import me.jellysquid.mods.sodium.client.util.frustum.Frustum;
+import me.jellysquid.mods.sodium.client.render.viewport.frustum.Frustum;
 import net.minecraft.world.phys.AABB;
 
 public class SodiumFrustum extends IFrustum {
@@ -8,7 +8,7 @@ public class SodiumFrustum extends IFrustum {
 	
 	@Override
 	public boolean test(AABB box) {
-		return frustum.isBoxVisible(
+		return frustum.testAab(
 				(float) box.minX, (float) box.minY, (float) box.minZ,
 				(float) box.maxX, (float) box.maxY, (float) box.maxZ
 		);

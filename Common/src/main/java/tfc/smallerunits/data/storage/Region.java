@@ -74,7 +74,7 @@ public class Region {
 							public void stop() {
 							}
 						},
-						LevelSourceProviderProvider.createGenerator(srv.getServerVersion(), parent),
+						LevelSourceProviderProvider.createGenerator(srv.getServerVersion(), parent, pos.toBlockPos()),
 						false, 0, new ArrayList<>(), false,
 						parent, upb, this
 				);
@@ -164,9 +164,9 @@ public class Region {
 
 	public Level getLevel(PacketListener listener, Player player, int upb) {
 		if (listener instanceof ServerPacketListener) {
-			return getServerWorld(player.level.getServer(), (ServerLevel) player.level, upb);
+			return getServerWorld(player.level().getServer(), (ServerLevel) player.level(), upb);
 		} else {
-			return getClientWorld(player.level, upb);
+			return getClientWorld(player.level(), upb);
 		}
 	}
 

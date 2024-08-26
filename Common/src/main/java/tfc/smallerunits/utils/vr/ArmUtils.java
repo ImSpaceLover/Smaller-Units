@@ -1,12 +1,12 @@
 package tfc.smallerunits.utils.vr;
 
-import com.mojang.math.Quaternion;
-import com.mojang.math.Vector4f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Quaternionf;
+import org.joml.Vector4f;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import tfc.smallerunits.api.PositionUtils;
 import tfc.smallerunits.simulation.level.ITickerLevel;
@@ -23,8 +23,8 @@ public class ArmUtils {
 		if (vrPlayer == null) return null;
 		VRController arm = vrPlayer.getHand(controller);
 		
-		Quaternion quat = arm.getQuaternion();
-		quat.conj();
+		Quaternionf quat = arm.getQuaternion();
+		quat.conjugate();
 		
 		ArrayList<Vec3> points = new ArrayList<>();
 		float sz = 0.05f;
@@ -46,7 +46,7 @@ public class ArmUtils {
 			vecs[i] = new Vec3(worker.x() * vrPlayer.worldScale, worker.y() * vrPlayer.worldScale, worker.z() * vrPlayer.worldScale);
 		}
 		
-		quat.conj();
+		quat.conjugate();
 		
 		return new Box(vecs, quat, worker, arm.getPosition());
 	}

@@ -8,6 +8,7 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerBlockEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
@@ -16,7 +17,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.PacketListener;
@@ -31,6 +32,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
@@ -50,7 +52,6 @@ import tfc.smallerunits.utils.PositionalInfo;
 import tfc.smallerunits.utils.scale.ResizingUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -70,7 +71,7 @@ public class PlatformUtils {
 	}
 	
 	public static ResourceLocation getRegistryName(BlockEntity be) {
-		return Registry.BLOCK_ENTITY_TYPE.getKey(be.getType());
+		return Registries.BLOCK_ENTITY_TYPE.registry();
 	}
 	
 	public static boolean shouldCaptureBlockSnapshots(Level level) {
@@ -78,7 +79,7 @@ public class PlatformUtils {
 	}
 	
 	public static double getStepHeight(LocalPlayer player) {
-		return player.maxUpStep;
+		return player.maxUpStep();
 	}
 	
 	// config
@@ -199,18 +200,18 @@ public class PlatformUtils {
 	
 	// tabs
 	public static CreativeModeTab tab(String name, Supplier<Item> icon) {
-		return net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder.create(new net.minecraft.resources.ResourceLocation("smallerunits:inventory_tab")).icon(() -> new ItemStack(icon.get())).appendItems((list) -> {
-			SU$fillItemCategory(null, list);
-			list.add(new ItemStack(tfc.smallerunits.Registry.SHRINKER.get()));
-			list.add(new ItemStack(tfc.smallerunits.Registry.GROWER.get()));
+		return FabricItemGroup.builder().icon(() -> new ItemStack(icon.get())).displayItems((list, output) -> {
+			SU$fillItemCategory(list, output);
+			output.accept(new ItemStack(tfc.smallerunits.Registry.SHRINKER.get()));
+			output.accept(new ItemStack(tfc.smallerunits.Registry.GROWER.get()));
 		}).build();
 	}
 	
-	private static void SU$fillItemCategory(CreativeModeTab pCategory, List<ItemStack> pItems) {
+	private static void SU$fillItemCategory(CreativeModeTab.ItemDisplayParameters pItems, CreativeModeTab.Output output) {
 		for (int i = 2; i <= 16; i++) {
 			ItemStack stack = new ItemStack(UNIT_SPACE_ITEM.get());
 			stack.getOrCreateTag().putInt("upb", i);
-			pItems.add(stack);
+			output.accept(stack);
 		}
 	}
 	

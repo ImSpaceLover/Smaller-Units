@@ -2,7 +2,6 @@ package tfc.smallerunits.client.render.debug;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.mojang.math.Matrix4f;
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -13,6 +12,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.joml.Matrix4f;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import tfc.smallerunits.plat.util.PlatformUtils;
 import tfc.smallerunits.utils.selection.UnitHitResult;
@@ -23,7 +23,7 @@ public class PlayerOffsetRenderHelper {
 		
 		{
 			stack.pushPose();
-			stack.last().pose().setIdentity();
+			stack.last().pose().identity();
 			stack.translate(
 					-camera.getPosition().x,
 					-camera.getPosition().y,
@@ -57,7 +57,7 @@ public class PlayerOffsetRenderHelper {
 				return;
 			
 			stack.pushPose();
-			stack.last().pose().setIdentity();
+			stack.last().pose().identity();
 			stack.translate(
 					-camera.getPosition().x,
 					-camera.getPosition().y,

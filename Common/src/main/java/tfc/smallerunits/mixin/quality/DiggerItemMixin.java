@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(DiggerItem.class)
 public class DiggerItemMixin {
-	@Inject(at = @At("TAIL"), method = "isCorrectToolForDrops(Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/world/level/block/state/BlockState;)Z", remap = false)
-	public void preCheckHarvestLevel(ItemStack stack, BlockState state, CallbackInfoReturnable<Boolean> cir) {
+	@Inject(at = @At("TAIL"), method = "isCorrectToolForDrops", remap = false)
+	public void preCheckHarvestLevel(BlockState state, CallbackInfoReturnable<Boolean> cir) {
 		// TODO, maybe
 		// awaiting poll to age a bit
 	}

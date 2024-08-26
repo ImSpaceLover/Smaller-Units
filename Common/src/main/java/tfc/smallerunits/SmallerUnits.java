@@ -46,7 +46,6 @@ public abstract class SmallerUnits extends AbstractMod {
 
     public static float tesselScale = 0;
 	private static boolean isVivecraftPresent;
-	private static boolean isVFEPresent;
 	private static boolean isOFPresent;
 	private static boolean isSodiumPresent =
 			PlatformUtils.isLoaded("sodium") ||
@@ -99,7 +98,6 @@ public abstract class SmallerUnits extends AbstractMod {
 		}
 
 		isVivecraftPresent = PlatformUtils.isLoaded("vivecraft");
-		isVFEPresent = PlatformUtils.isLoaded("vivecraftforgeextensions");
 		try {
 			Class<?> clazz = Class.forName("net.optifine.Config");
 			if (clazz != null) {
@@ -184,10 +182,6 @@ public abstract class SmallerUnits extends AbstractMod {
 
 	public static boolean isVivecraftPresent() {
 		return isVivecraftPresent;
-	}
-
-	public static boolean isVFEPresent() {
-		return isVFEPresent;
 	}
 
 	public static boolean isIsOFPresent() {

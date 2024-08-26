@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
@@ -472,7 +473,7 @@ public class AbstractTickerClientLevel extends ClientLevel implements ITickerLev
 				},
 				() -> {
 					Vec3 vec3 = pContext.getFrom().subtract(pContext.getTo());
-					return BlockHitResult.miss(pContext.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z), new BlockPos(pContext.getTo()));
+					return BlockHitResult.miss(pContext.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z), new BlockPos((int) pContext.getTo().x, (int) pContext.getTo().y, (int) pContext.getTo().z));
 				}
 		);
 	}
@@ -632,7 +633,7 @@ public class AbstractTickerClientLevel extends ClientLevel implements ITickerLev
 		
 		AABB box = HitboxScaling.getOffsetAndScaledBox(Minecraft.getInstance().player.getBoundingBox(), Minecraft.getInstance().player.position(), upb, region.pos);
 		Vec3 vec = box.getCenter().subtract(0, box.getYsize() / 2, 0);
-		BlockPos pos = new BlockPos(vec);
+		BlockPos pos = new BlockPos((int) vec.x, (int) vec.y, (int) vec.z);
 		this.animateTick(pos.getX(), pos.getY(), pos.getZ()); // TODO: this is borked
 		
 		try {
@@ -650,7 +651,7 @@ public class AbstractTickerClientLevel extends ClientLevel implements ITickerLev
 		} catch (Throwable ignored) {
 		}
 		
-		getLightEngine().runUpdates(10000, true, false);
+		getLightEngine().runLightUpdates();
 		for (Runnable runnable : completeOnTick) runnable.run();
 		completeOnTick.clear();
 		
@@ -691,8 +692,8 @@ public class AbstractTickerClientLevel extends ClientLevel implements ITickerLev
 	
 	@Override
 	public Holder<Biome> getBiome(BlockPos p_204167_) {
-		Registry<Biome> reg = registryAccess().registry(Registry.BIOME_REGISTRY).get();
-		return reg.getOrCreateHolder(Biomes.THE_VOID).get().orThrow();
+		Registry<Biome> reg = registryAccess().registry(Registries.BIOME).get();
+		return reg.getHolderOrThrow(Biomes.THE_VOID);
 	}
 	
 	@Override

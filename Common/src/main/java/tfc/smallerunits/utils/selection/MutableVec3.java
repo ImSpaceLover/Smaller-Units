@@ -1,8 +1,8 @@
 package tfc.smallerunits.utils.selection;
 
-import com.mojang.math.Vector3f;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3f;
 
 public class MutableVec3 extends Vec3 {
 	public MutableVec3(double pX, double pY, double pZ) {

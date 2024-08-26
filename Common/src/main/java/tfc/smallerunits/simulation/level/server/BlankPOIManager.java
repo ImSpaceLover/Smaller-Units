@@ -61,10 +61,6 @@ public class BlankPOIManager extends PoiManager {
 	}
 	
 	@Override
-	public void checkConsistencyWithBlocks(ChunkPos pPos, LevelChunkSection pSection) {
-	}
-	
-	@Override
 	public void ensureLoadedAndValid(LevelReader pLevelReader, BlockPos pPos, int pCoordinateOffset) {
 	}
 	

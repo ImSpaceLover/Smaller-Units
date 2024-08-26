@@ -24,7 +24,7 @@ public abstract class PersistentEntitySectionManagerMixin<T extends EntityAccess
 	@Inject(at = @At("HEAD"), method = "getEffectiveStatus", cancellable = true)
 	private static <T extends EntityAccess> void preGetEffectiveStatus(T pEntity, Visibility pVisibility, CallbackInfoReturnable<Visibility> cir) {
 		if (pEntity instanceof Entity) {
-			if (((Entity) pEntity).getLevel() instanceof ITickerLevel) {
+			if (((Entity) pEntity).level() instanceof ITickerLevel) {
 				cir.setReturnValue(Visibility.TICKING);
 			}
 		}

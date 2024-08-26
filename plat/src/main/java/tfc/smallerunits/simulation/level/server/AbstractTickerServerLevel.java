@@ -6,6 +6,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.progress.ChunkProgressListener;
+import net.minecraft.world.RandomSequences;
 import net.minecraft.world.level.CustomSpawner;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -31,7 +32,8 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 				p_8579_,
 				p_8580_,
 				spawners,
-				p_8582_
+				p_8582_,
+				new RandomSequences(p_8580_)
 		);
 	}
 	

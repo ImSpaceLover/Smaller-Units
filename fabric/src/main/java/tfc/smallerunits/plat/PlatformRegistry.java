@@ -1,6 +1,6 @@
 package tfc.smallerunits.plat;
 
-import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.block.Block;
@@ -13,9 +13,9 @@ public class PlatformRegistry<T> {
 	
 	public PlatformRegistry(Class<T> cls, String modid) {
 		this.modid = modid;
-		if (cls == Block.class) this.registry = (net.minecraft.core.Registry<T>) net.minecraft.core.Registry.BLOCK;
-		else if (cls == Item.class) this.registry = (net.minecraft.core.Registry<T>) net.minecraft.core.Registry.ITEM;
-		else if (cls == RecipeSerializer.class) this.registry = (net.minecraft.core.Registry<T>) Registry.RECIPE_SERIALIZER;
+		if (cls == Block.class) this.registry = (net.minecraft.core.Registry<T>) Registries.BLOCK;
+		else if (cls == Item.class) this.registry = (net.minecraft.core.Registry<T>) Registries.ITEM;
+		else if (cls == RecipeSerializer.class) this.registry = (net.minecraft.core.Registry<T>) Registries.RECIPE_SERIALIZER;
 	}
 	
 	public void register() {

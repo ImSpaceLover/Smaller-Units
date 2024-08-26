@@ -26,7 +26,7 @@ import java.util.List;
 public class UnitSpaceItem extends AbstractItem {
 	public UnitSpaceItem() {
 		super(
-				new Properties().tab(Registry.tab)
+				new Properties()
 //						.rarity(Rarity.create("su", ChatFormatting.GREEN))
 		);
 	}
@@ -78,16 +78,5 @@ public class UnitSpaceItem extends AbstractItem {
 		}
 		pTooltipComponents.add(Component.translatable("smallerunits.tooltip.scale", upb));
 		super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
-	}
-	
-	@Override
-	public void fillItemCategory(CreativeModeTab pCategory, NonNullList<ItemStack> pItems) {
-		if (this.allowedIn(pCategory)) {
-			for (int i = 2; i <= 16; i++) {
-				ItemStack stack = new ItemStack(this);
-				stack.getOrCreateTag().putInt("upb", i);
-				pItems.add(stack);
-			}
-		}
 	}
 }

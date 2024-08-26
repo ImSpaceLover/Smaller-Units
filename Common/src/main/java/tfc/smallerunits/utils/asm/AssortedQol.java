@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
@@ -62,7 +63,7 @@ public class AssortedQol {
 		position = position.subtract(pos.getX(), pos.getY(), pos.getZ());
 		position = position.scale(((ITickerLevel) level).getUPB());
 		
-		BlockPos ps = new BlockPos(position);
+		BlockPos ps = new BlockPos((int) position.x, (int) position.y, (int) position.z);
 		BlockState block = level.getBlockState(ps);
 		FluidState fluid = block.getFluidState();
 		if (fluid.is(FluidTags.LAVA)) {
@@ -130,7 +131,7 @@ public class AssortedQol {
 			list.add(ChatFormatting.ITALIC + "Targeted Small Block: " + blockpos.getX() + ", " + blockpos.getY() + ", " + blockpos.getZ());
 			list.add(ChatFormatting.ITALIC + "World: " + level.dimension().location() + "|" + space.regionPos.x + "|" + space.regionPos.y + "|" + space.regionPos.z + "|");
 			list.add(ChatFormatting.ITALIC + "Scale: 1/" + space.unitsPerBlock);
-			list.add(String.valueOf((Object) Registry.BLOCK.getKey(state.getBlock())));
+			list.add(String.valueOf(Registries.BLOCK));
 			
 			for (Map.Entry<Property<?>, Comparable<?>> entry : state.getValues().entrySet()) {
 				Property<?> property = entry.getKey();

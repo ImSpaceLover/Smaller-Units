@@ -7,8 +7,6 @@
   "plugin": "tfc.smallerunits.plat.asm.MixinConnector",
   "mixins": [
     "ChunkSerializerAccessor",
-    "compat.ip.ChunkDataSyncManagerMixin",
-    "compat.ip.PacketRedirectionMixin",
     "compat.optimization.alternate_current.ACLevelAccessMixin",
     "core.LevelMixin",
     "core.PacketUtilsMixin",
@@ -41,19 +39,16 @@
     "optimization.LevelMixin",
     "optimization.ShapesMixin",
     "optimization.VoxelShapeAccessor",
-    "quality.EntityQolMixin",
-    "quality.vr.PistonMixin"
+    "quality.EntityQolMixin"
   ],
   "client": [
     "LevelRendererMixin",
     "LevelRendererMixinBlocks",
-    "compat.ip.PacketRedirectionClientMixin",
     "compat.optimization.sodium.LevelMixin",
     "compat.optimization.sodium.RenderSectionManagerMixin",
     "compat.optimization.sodium.RenderSectionMixin",
     "compat.optimization.sodium.SodiumDebugOverlayMixin",
     "compat.optimization.sodium.SodiumLevelRendererMixin",
-    "compat.optimization.sodium.UnitCapabilityHandlerMixin",
     "core.ClientLevelMixin",
     "core.MinecraftMixin",
     "core.MultiPlayerGameModeMixin",

@@ -21,10 +21,10 @@ public class LivingEntityMixin {
 	public void postCheckClimable(CallbackInfoReturnable<Boolean> cir) {
 		LivingEntity entity = ((LivingEntity) (Object) this);
 		BlockPos pos = entity.blockPosition();
-		BlockState state = entity.getLevel().getBlockState(pos);
+		BlockState state = entity.level().getBlockState(pos);
 		if (state.getBlock() instanceof IContextAwareLadder ladderBlock) {
 			if (ladderBlock.isLadder(
-					state, entity.getLevel(),
+					state, entity.level(),
 					pos, entity
 			)) {
 				lastClimbablePos = Optional.of(pos);

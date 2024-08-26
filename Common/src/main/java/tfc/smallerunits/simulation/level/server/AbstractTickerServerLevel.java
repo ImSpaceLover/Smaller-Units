@@ -4,6 +4,7 @@ import com.mojang.datafixers.util.Pair;
 import net.minecraft.Util;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockEventPacket;
@@ -19,6 +20,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.progress.ChunkProgressListener;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.AbortableIterationConsumer;
+import net.minecraft.world.RandomSequences;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -167,7 +170,8 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 				p_8579_,
 				p_8580_,
 				spawners,
-				p_8582_
+				p_8582_,
+				new RandomSequences(p_8580_)
 		);
 //		this.parentU = parentU;
 		this.parent = new WeakReference<>(parent);
@@ -239,7 +243,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 		if (lvl == null) return;
 		for (int i = 0; i < lvl.players().size(); ++i) {
 			ServerPlayer serverplayer = (ServerPlayer) lvl.players().get(i);
-			if (serverplayer == pExcept && serverplayer.level.dimension() == pDimension) {
+			if (serverplayer == pExcept && serverplayer.level().dimension() == pDimension) {
 				double d0 = pX - serverplayer.getX();
 				double d1 = pY - serverplayer.getY();
 				double d2 = pZ - serverplayer.getZ();
@@ -271,7 +275,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 	public boolean sendParticles(ServerPlayer pPlayer, boolean pLongDistance, double pPosX, double pPosY, double pPosZ, Packet<?> pPacket) {
 		Level lvl = parent.get();
 		if (lvl == null) return false;
-		if (pPlayer.getLevel() == lvl || pPlayer.level == this) {
+		if (pPlayer.level() == lvl || pPlayer.level() == this) {
 			BlockPos blockpos = pPlayer.blockPosition();
 			
 			double scl = 1f / upb;
@@ -303,9 +307,9 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 	public Holder<Biome> getBiome(BlockPos pos) {
 		BlockPos bp = region.pos.toBlockPos().offset(
 				// TODO: double check this
-				Math.floor(pos.getX() / (double) upb),
-				Math.floor(pos.getY() / (double) upb),
-				Math.floor(pos.getZ() / (double) upb)
+				(int) Math.floor(pos.getX() / (double) upb),
+				(int) Math.floor(pos.getY() / (double) upb),
+				(int) Math.floor(pos.getZ() / (double) upb)
 		);
 		return parent.get().getBiome(bp.offset(region.pos.toBlockPos()));
 	}
@@ -462,11 +466,12 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 			public Iterable<Entity> getAll() {
 				return entities;
 			}
-			
-			public <U extends Entity> void get(EntityTypeTest<Entity, U> p_156935_, Consumer<U> p_156936_) {
+
+			@Override
+			public <U extends Entity> void get(EntityTypeTest<Entity, U> entityTypeTest, AbortableIterationConsumer<U> abortableIterationConsumer) {
 				for (Entity entity : entities) {
-					if (p_156935_.getBaseClass().isInstance(entity)) {
-						p_156936_.accept((U) entity);
+					if (entityTypeTest.getBaseClass().isInstance(entity)) {
+						abortableIterationConsumer.accept((U) entity);
 					}
 				}
 			}
@@ -478,13 +483,14 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 					}
 				}
 			}
-			
-			public <U extends Entity> void get(EntityTypeTest<Entity, U> p_156932_, AABB p_156933_, Consumer<U> p_156934_) {
-				// ?
+
+			@Override
+			public <U extends Entity> void get(EntityTypeTest<Entity, U> entityTypeTest, AABB aabb, AbortableIterationConsumer<U> abortableIterationConsumer) {
+// ?
 				for (Entity entity : entities) {
-					if (p_156933_.intersects(entity.getBoundingBox())) {
-						if (p_156932_.getBaseClass().isInstance(entity)) {
-							p_156934_.accept((U) entity);
+					if (aabb.intersects(entity.getBoundingBox())) {
+						if (entityTypeTest.getBaseClass().isInstance(entity)) {
+							abortableIterationConsumer.accept((U) entity);
 						}
 					}
 				}
@@ -540,7 +546,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 		{
 			CompoundTag blockTicks = new CompoundTag();
 			ArrayList<ScheduledTick<Block>> ticks = ((SUTickList) this.blockTicks).getTicksInArea(box);
-			Registry<Block> blockRegistry = parent.get().registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY);
+			Registry<Block> blockRegistry = parent.get().registryAccess().registryOrThrow(Registries.BLOCK);
 			for (ScheduledTick<Block> tick : ticks) {
 				CompoundTag tag1 = new CompoundTag();
 				tag1.putLong("ttime", tick.triggerTick() - getGameTime());
@@ -554,7 +560,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 		{
 			CompoundTag blockTicks = new CompoundTag();
 			ArrayList<ScheduledTick<Fluid>> ticks = ((SUTickList) this.fluidTicks).getTicksInArea(box);
-			Registry<Fluid> fluidRegistry = parent.get().registryAccess().registryOrThrow(Registry.FLUID_REGISTRY);
+			Registry<Fluid> fluidRegistry = parent.get().registryAccess().registryOrThrow(Registries.FLUID);
 			for (ScheduledTick<Fluid> tick : ticks) {
 				CompoundTag tag1 = new CompoundTag();
 				tag1.putLong("ttime", tick.triggerTick() - getGameTime());
@@ -581,7 +587,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 	public void loadTicks(CompoundTag tag) {
 		if (tag.isEmpty()) return;
 		
-		Registry<Block> blockRegistry = parent.get().registryAccess().registryOrThrow(Registry.BLOCK_REGISTRY);
+		Registry<Block> blockRegistry = parent.get().registryAccess().registryOrThrow(Registries.BLOCK);
 		CompoundTag blocks = tag.getCompound("blocks");
 		for (String allKey : blocks.getAllKeys()) {
 			CompoundTag tick = blocks.getCompound(allKey);
@@ -600,7 +606,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 			));
 		}
 		
-		Registry<Fluid> fluidRegistry = parent.get().registryAccess().registryOrThrow(Registry.FLUID_REGISTRY);
+		Registry<Fluid> fluidRegistry = parent.get().registryAccess().registryOrThrow(Registries.FLUID);
 		CompoundTag fluids = tag.getCompound("fluids");
 		for (String allKey : fluids.getAllKeys()) {
 			CompoundTag tick = fluids.getCompound(allKey);
@@ -806,7 +812,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 				},
 				() -> {
 					Vec3 vec3 = pContext.getFrom().subtract(pContext.getTo());
-					return BlockHitResult.miss(pContext.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z), new BlockPos(pContext.getTo()));
+					return BlockHitResult.miss(pContext.getTo(), Direction.getNearest(vec3.x, vec3.y, vec3.z), new BlockPos((int) pContext.getTo().x, (int) pContext.getTo().y, (int) pContext.getTo().z));
 				}
 		);
 	}
@@ -978,7 +984,7 @@ public abstract class AbstractTickerServerLevel extends ServerLevel implements I
 		
 		NetworkingHacks.unitPos.remove();
 		
-		getLightEngine().runUpdates(10000, true, false);
+		getLightEngine().runLightUpdates();
 		for (Runnable runnable : completeOnTick) runnable.run();
 		completeOnTick.clear();
 		

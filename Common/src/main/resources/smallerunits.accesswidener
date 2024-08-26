@@ -2,6 +2,8 @@ accessWidener	v1	named
 
 accessible method net/minecraft/client/renderer/LevelRenderer renderEntity (Lnet/minecraft/world/entity/Entity;DDDFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;)V
 
+accessible method net/minecraft/world/level/storage/LevelStorageSource$LevelStorageAccess <init> (Lnet/minecraft/world/level/storage/LevelStorageSource;Ljava/lang/String;Ljava/nio/file/Path;)V
+
 accessible field net/minecraft/world/entity/LivingEntity jumping Z
 
 accessible field net/minecraft/world/entity/Entity eyeHeight F
@@ -13,9 +15,10 @@ extendable method net/minecraft/client/multiplayer/ClientLevel playSound (DDDLne
 
 mutable    field net/minecraft/client/Minecraft particleEngine Lnet/minecraft/client/particle/ParticleEngine;
 
+accessible field net/minecraft/world/level/lighting/LevelLightEngine blockEngine Lnet/minecraft/world/level/lighting/LightEngine;
 accessible field net/minecraft/world/level/lighting/LevelLightEngine blockEngine Lnet/minecraft/world/level/lighting/LayerLightEngine;
 mutable    field net/minecraft/world/level/lighting/LevelLightEngine blockEngine Lnet/minecraft/world/level/lighting/LayerLightEngine;
-accessible field net/minecraft/world/level/lighting/LevelLightEngine skyEngine Lnet/minecraft/world/level/lighting/LayerLightEngine;
+accessible field net/minecraft/world/level/lighting/LevelLightEngine skyEngine Lnet/minecraft/world/level/lighting/LightEngine;
 mutable    field net/minecraft/world/level/lighting/LevelLightEngine skyEngine Lnet/minecraft/world/level/lighting/LayerLightEngine;
 
 accessible class net/minecraft/world/level/lighting/BlockLightSectionStorage$BlockDataLayerStorageMap

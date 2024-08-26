@@ -43,11 +43,11 @@ public class NetCtx {
 	}
 	
 	public void enqueueWork(Runnable r) {
-		if (PlatformUtils.isClient() && (sender == null || sender.getLevel().isClientSide)) {
+		if (PlatformUtils.isClient() && (sender == null || sender.level().isClientSide)) {
 			Minecraft.getInstance().tell(r);
 		} else {
 			if (sender != null) {
-				sender.getLevel().getServer().execute(r);
+				sender.level().getServer().execute(r);
 			} else {
 				r.run(); // whar
 				Loggers.SU_LOGGER.warn("A null sender on server???");

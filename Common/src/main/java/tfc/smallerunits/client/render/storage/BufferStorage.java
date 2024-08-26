@@ -28,7 +28,7 @@ public class BufferStorage {
 			buffersActive.put(type, buf);
 			return buf;
 		} else {
-			VertexBuffer buf = new VertexBuffer();
+			VertexBuffer buf = new VertexBuffer(VertexBuffer.Usage.DYNAMIC);
 			buffersActive.put(type, buf);
 			return buf;
 		}

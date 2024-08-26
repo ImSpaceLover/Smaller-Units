@@ -1,10 +1,10 @@
 package tfc.smallerunits.mixin.compat.ip;
 
-import org.spongepowered.asm.mixin.Mixin;
-import qouteall.imm_ptl.core.network.PacketRedirection;
-
-@Mixin(value = PacketRedirection.class, remap = false)
-public class PacketRedirectionMixin {
+//import org.spongepowered.asm.mixin.Mixin;
+//import qouteall.imm_ptl.core.network.PacketRedirection;
+//
+//@Mixin(value = PacketRedirection.class, remap = false)
+//public class PacketRedirectionMixin {
 //	@ModifyVariable(
 //			method = {"createRedirectedMessage"},
 //			at = @At("HEAD"),
@@ -29,4 +29,4 @@ public class PacketRedirectionMixin {
 //			return (E) pkt;
 //		return e;
 //	}
-}
+//}
