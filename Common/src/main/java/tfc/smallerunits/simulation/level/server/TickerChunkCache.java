@@ -41,6 +41,7 @@ import tfc.smallerunits.simulation.level.server.saving.SUDimStorage;
 import tfc.smallerunits.simulation.light.NotThreadedSULightManager;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
@@ -60,12 +61,7 @@ public class TickerChunkCache extends ServerChunkCache implements ITickerChunkCa
         this.chunkMap = new UnitChunkMap(p_214982_, p_214983_, p_214984_, p_214985_, p_214986_, this.mainThreadProcessor, this, p_214987_, p_214991_, p_214992_, p_214993_, p_214988_, p_214990_);
         this.upb = upb;
         columns = new BasicVerticalChunk[33 * 33 * upb * upb][];
-        empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), Holder.Reference.createStandAlone(new HolderOwner<>() {
-            @Override
-            public boolean canSerializeIn(HolderOwner<Biome> $$0) {
-                return HolderOwner.super.canSerializeIn($$0);
-            }
-        }, Biomes.THE_VOID));
+        empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), Holder.direct(Objects.requireNonNull(getLevel().registryAccess().registry(Registries.BIOME).get().get(Biomes.THE_VOID.registry()))));
         lightEngine = new NotThreadedSULightManager(this, this.chunkMap, true);
         this.dataStorage = new SUDimStorage(null, p_214984_);
     }

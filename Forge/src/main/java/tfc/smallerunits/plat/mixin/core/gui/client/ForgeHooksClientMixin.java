@@ -2,6 +2,7 @@ package tfc.smallerunits.plat.mixin.core.gui.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.ScreenEvent;
@@ -22,7 +23,7 @@ public class ForgeHooksClientMixin {
 	private static final ThreadLocal<Screen> currentScreen = new ThreadLocal<>();
 	
 	@Inject(at = @At("HEAD"), method = "drawScreenInternal")
-	private static void preDrawScreen(Screen screen, PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+	private static void preDrawScreen(Screen screen, GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
 		currentScreen.set(screen);
 		if (Minecraft.getInstance().player != null) {
 			SUScreenAttachments screenAttachments = ((SUScreenAttachments) screen);
@@ -36,7 +37,7 @@ public class ForgeHooksClientMixin {
 	}
 	
 	@Inject(at = @At("RETURN"), method = "drawScreenInternal")
-	private static void postDrawScreen(Screen screen, PoseStack poseStack, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+	private static void postDrawScreen(Screen screen, GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
 		if (Minecraft.getInstance().player != null) {
 			SUScreenAttachments screenAttachments = ((SUScreenAttachments) screen);
 			PositionalInfo info = screenAttachments.getPositionalInfo();
