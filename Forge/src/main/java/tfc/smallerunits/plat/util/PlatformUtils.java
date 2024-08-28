@@ -8,7 +8,6 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -23,9 +22,6 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -44,12 +40,9 @@ import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.fml.*;
 import net.minecraftforge.fml.loading.FMLEnvironment;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tfc.smallerunits.data.capability.ISUCapability;
 import tfc.smallerunits.plat.CapabilityProvider;
 import tfc.smallerunits.plat.itf.CapabilityLike;
-import tfc.smallerunits.plat.itf.ICullableBE;
 import tfc.smallerunits.simulation.level.ITickerLevel;
 import tfc.smallerunits.utils.scale.ResizingUtils;
 
@@ -73,7 +66,7 @@ public class PlatformUtils {
 	}
 	
 	public static ResourceLocation getRegistryName(BlockEntity be) {
-		return Registries.BLOCK_ENTITY_TYPE.registry();
+		return be.getLevel().registryAccess().registryOrThrow(Registries.BLOCK_ENTITY_TYPE).getKey(be.getType());
 	}
 	
 	public static boolean shouldCaptureBlockSnapshots(Level level) {

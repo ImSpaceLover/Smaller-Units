@@ -3,7 +3,9 @@ package tfc.smallerunits.simulation.level.server;
 import com.mojang.datafixers.DataFixer;
 import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.objects.ObjectOpenHashBigSet;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.SectionPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAnimatePacket;
@@ -16,7 +18,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.Biomes;
 import net.minecraft.world.level.chunk.*;
 import net.minecraft.world.level.entity.ChunkStatusUpdateListener;
@@ -41,7 +42,6 @@ import tfc.smallerunits.simulation.level.server.saving.SUDimStorage;
 import tfc.smallerunits.simulation.light.NotThreadedSULightManager;
 
 import java.lang.ref.WeakReference;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.function.BooleanSupplier;
@@ -61,7 +61,7 @@ public class TickerChunkCache extends ServerChunkCache implements ITickerChunkCa
         this.chunkMap = new UnitChunkMap(p_214982_, p_214983_, p_214984_, p_214985_, p_214986_, this.mainThreadProcessor, this, p_214987_, p_214991_, p_214992_, p_214993_, p_214988_, p_214990_);
         this.upb = upb;
         columns = new BasicVerticalChunk[33 * 33 * upb * upb][];
-        empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), Holder.direct(Objects.requireNonNull(getLevel().registryAccess().registry(Registries.BIOME).get().get(Biomes.THE_VOID.registry()))));
+        empty = new EmptyLevelChunk(this.level, new ChunkPos(0, 0), p_214982_.registryAccess().registry(Registries.BIOME).get().getHolder(Biomes.THE_VOID).get());
         lightEngine = new NotThreadedSULightManager(this, this.chunkMap, true);
         this.dataStorage = new SUDimStorage(null, p_214984_);
     }

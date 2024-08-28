@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -55,8 +54,12 @@ public class SyncPacketS2C extends Packet {
 				tg.putInt("x", tile.getBlockPos().getX());
 				tg.putInt("y", tile.getBlockPos().getY());
 				tg.putInt("z", tile.getBlockPos().getZ());
-				//TODO does the below work at all?
-				tg.putString("id", Registries.BLOCK_ENTITY_TYPE.registry().toString());
+//				tg.putString("id", net.minecraft.core.Registry.BLOCK_ENTITY_TYPE.getKey(
+//						tile.getType()
+//				).toString());
+				tg.putString("id", tile.getLevel().registryAccess().registryOrThrow(
+						Registries.BLOCK_ENTITY_TYPE
+				).getKey(tile.getType()).toString());
 				beData.add(tg);
 			}
 		}

@@ -24,7 +24,6 @@ import tfc.smallerunits.client.render.storage.BufferStorage;
 import tfc.smallerunits.client.render.util.RenderWorld;
 import tfc.smallerunits.client.render.util.TranslatingVertexBuilder;
 import tfc.smallerunits.data.capability.ISUCapability;
-import tfc.smallerunits.plat.itf.IMayManageModelData;
 import tfc.smallerunits.plat.util.PlatformUtils;
 import tfc.smallerunits.utils.PositionalInfo;
 import tfc.smallerunits.utils.math.Math1D;
@@ -112,8 +111,8 @@ public class SUVBOEmitter {
 		SectionPos chunkPos = SectionPos.of(new BlockPos(space.pos.getX() & 511, space.pos.getY() & 511, space.pos.getZ() & 511));
 		BlockPos chunkOffset = new BlockPos(chunkPos.minBlockX(), chunkPos.minBlockY(), chunkPos.minBlockZ());
 		PoseStack stk = new PoseStack();
-		stk.last().pose().get(stack.last().pose());
-		stk.last().normal().get(stack.last().normal());
+		stk.last().pose().set(stack.last().pose());
+		stk.last().normal().set(stack.last().normal());
 		BlockPos.MutableBlockPos blockPosMut = new BlockPos.MutableBlockPos();
 		
 		for (int x = 0; x < upb; x++) {
@@ -152,7 +151,7 @@ public class SUVBOEmitter {
 					
 					if (b.getRenderShape(block) == RenderShape.MODEL) {
 						RandomSource randomSource = new XoroshiroRandomSource(offsetPos.asLong());
-						Object modelData = ((IMayManageModelData) wld).getModelData(offsetPos);
+						Object modelData = wld.getModelData(offsetPos);
 						BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(block);
 						if (PlatformUtils.canRenderIn(model, block, randomSource, modelData, chunkBufferLayer)) {
 							if (consumer == null) consumer = buffers.get(chunkBufferLayer);

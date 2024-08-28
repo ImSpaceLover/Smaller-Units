@@ -4,11 +4,10 @@ import com.mojang.datafixers.util.Either;
 import it.unimi.dsi.fastutil.shorts.ShortSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.SectionPos;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.network.protocol.game.ClientboundSectionBlocksUpdatePacket;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ChunkHolder;
+import net.minecraft.server.level.ServerChunkCache;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -20,14 +19,10 @@ import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.lighting.LevelLightEngine;
 import org.jetbrains.annotations.Nullable;
-import tfc.smallerunits.SmallerUnits;
-import tfc.smallerunits.api.PositionUtils;
 import tfc.smallerunits.data.access.ChunkHolderAccessor;
-import tfc.smallerunits.logging.Loggers;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 public class UnitChunkHolder extends ChunkHolder {
 	LevelChunk chunk;
@@ -100,10 +95,46 @@ public class UnitChunkHolder extends ChunkHolder {
 		blockChanged(pos);
 	}
 	
+	// TODO: modernize
+//	@Override
+//	public void broadcastChanges(LevelChunk pChunk) {
+//		if (this.hasChangedSections) {
+//			List list1 = this.playerProvider.getPlayers(this.pos, false);
+//
+//			for (int j = 0; j < this.changedBlocksPerSection.length; ++j) {
+//				ShortSet shortset = this.changedBlocksPerSection[j];
+//				if (shortset != null) {
+//					this.changedBlocksPerSection[j] = null;
+//					if (!list1.isEmpty()) {
+//						int i = this.levelHeightAccessor.getSectionYFromSectionIndex(j);
+//						SectionPos sectionpos = SectionPos.of(pChunk.getPos(), i);
+//						if (shortset.size() == 1) {
+//							BlockPos blockpos = sectionpos.relativeToBlockPos(shortset.iterator().nextShort());
+//							BlockState blockstate = level.getBlockState(blockpos);
+//							((ChunkHolderAccessor) this).SU$call_broadcast(list1, new ClientboundBlockUpdatePacket(blockpos, blockstate));
+//							((ChunkHolderAccessor) this).SU$call_broadcastBlockEntityIfNeeded(list1, level, blockpos, blockstate);
+//						} else {
+//							LevelChunkSection levelchunksection = pChunk.getSection(j);
+//							ClientboundSectionBlocksUpdatePacket clientboundsectionblocksupdatepacket = new ClientboundSectionBlocksUpdatePacket(
+//									sectionpos, shortset, levelchunksection
+//							);
+//							((ChunkHolderAccessor) this).SU$call_broadcast(list1, clientboundsectionblocksupdatepacket);
+//							clientboundsectionblocksupdatepacket.runUpdates((var3x, var4x) -> ((ChunkHolderAccessor) this).SU$call_broadcastBlockEntityIfNeeded(list1, level, var3x, var4x));
+//						}
+//					}
+//				}
+//			}
+//
+//			this.hasChangedSections = false;
+//		}
+//	}
+	
 	@Override
 	public void broadcastChanges(LevelChunk pChunk) {
 		if (this.hasChangedSections) {
 			Level level = pChunk.getLevel();
+			
+			List<ServerPlayer> players = ((ServerChunkCache) pChunk.getLevel().getChunkSource()).chunkMap.getPlayers(chunk.getPos(), false);
 			
 			for (int l = 0; l < this.changedBlocksPerSection.length; ++l) {
 				ShortSet shortset = this.changedBlocksPerSection[l];
@@ -113,13 +144,15 @@ public class UnitChunkHolder extends ChunkHolder {
 					if (shortset.size() == 1) {
 						BlockPos blockpos = sectionpos.relativeToBlockPos(shortset.iterator().nextShort());
 						BlockState blockstate = level.getBlockState(blockpos);
-						this.broadcastChanges(new LevelChunk(level, new ChunkPos(blockpos.getX() * 16, blockpos.getZ() * 16)));
+						((ChunkHolderAccessor) this).SU$call_broadcast(players, new ClientboundBlockUpdatePacket(blockpos, blockstate));
+						((ChunkHolderAccessor) this).SU$call_broadcastBlockEntityIfNeeded(players, level, blockpos, blockstate);
 					} else {
 						LevelChunkSection levelchunksection = pChunk.getSection(yPos);
-						ClientboundSectionBlocksUpdatePacket clientboundsectionblocksupdatepacket = new ClientboundSectionBlocksUpdatePacket(sectionpos, shortset, levelchunksection);
-						clientboundsectionblocksupdatepacket.runUpdates((p_140078_, p_140079_) -> {
-							this.broadcastChanges(new LevelChunk(level, new ChunkPos(p_140078_.getX() * 16, p_140078_.getZ() * 16)));
-						});
+						ClientboundSectionBlocksUpdatePacket clientboundsectionblocksupdatepacket = new ClientboundSectionBlocksUpdatePacket(
+								sectionpos, shortset, levelchunksection
+						);
+						((ChunkHolderAccessor) this).SU$call_broadcast(players, clientboundsectionblocksupdatepacket);
+						clientboundsectionblocksupdatepacket.runUpdates((var3x, var4x) -> ((ChunkHolderAccessor) this).SU$call_broadcastBlockEntityIfNeeded(players, level, var3x, var4x));
 					}
 					
 					this.changedBlocksPerSection[l] = null;

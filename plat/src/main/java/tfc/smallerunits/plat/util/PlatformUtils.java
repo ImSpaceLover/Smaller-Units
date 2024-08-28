@@ -2,19 +2,16 @@ package tfc.smallerunits.plat.util;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.BlockRenderDispatcher;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.PacketListener;
-import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.network.protocol.game.ClientboundCustomPayloadPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -36,7 +33,6 @@ import tfc.smallerunits.plat.itf.CapabilityLike;
 import tfc.smallerunits.plat.itf.ICullableBE;
 
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -54,7 +50,7 @@ public class PlatformUtils {
 	}
 	
 	public static ResourceLocation getRegistryName(BlockEntity be) {
-		return Registries.BLOCK_ENTITY_TYPE.registry();
+		return be.getLevel().registryAccess().registryOrThrow(Registries.BLOCK_ENTITY_TYPE).getKey(be.getType());
 	}
 
 //	public static double getReach(LivingEntity entity, double reach) {

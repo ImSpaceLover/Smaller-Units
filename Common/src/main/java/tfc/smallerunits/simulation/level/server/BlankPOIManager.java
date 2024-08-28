@@ -10,12 +10,15 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.ai.village.poi.PoiManager;
 import net.minecraft.world.entity.ai.village.poi.PoiRecord;
+import net.minecraft.world.entity.ai.village.poi.PoiSection;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.LevelHeightAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.chunk.LevelChunkSection;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.BiPredicate;
@@ -146,5 +149,45 @@ public class BlankPOIManager extends PoiManager {
 	@Override
 	public boolean exists(BlockPos $$0, Predicate<Holder<PoiType>> $$1) {
 		return false;
+	}
+	
+	@Override
+	public void checkConsistencyWithBlocks(SectionPos $$0, LevelChunkSection $$1) {
+	}
+	
+	// TODO: ensure this causes no problems?
+	@Override
+	public boolean hasWork() {
+		return false;
+	}
+	
+	@Nullable
+	@Override
+	protected Optional<PoiSection> get(long $$0) {
+		return Optional.empty();
+	}
+	
+	@Override
+	protected Optional<PoiSection> getOrLoad(long $$0) {
+		return Optional.empty();
+	}
+	
+	@Override
+	protected boolean outsideStoredRange(long $$0) {
+		return true;
+	}
+	
+	@Override
+	protected PoiSection getOrCreate(long $$0) {
+		return super.getOrCreate($$0);
+	}
+	
+	@Override
+	public void flush(ChunkPos $$0) {
+	}
+	
+	@Override
+	public void close() throws IOException {
+		super.close();
 	}
 }
