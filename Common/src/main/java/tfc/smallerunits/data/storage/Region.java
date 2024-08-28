@@ -96,7 +96,7 @@ public class Region {
 				ThreadLocals.levelLocal.set(parent);
 				levels[upb] = new TickerClientLevel(
 						(ClientLevel) parent,
-						null, ((ClientLevel) parent).getLevelData(),
+						IHateTheDistCleaner.getConnection((ClientLevel) parent), ((ClientLevel) parent).getLevelData(),
 						parent.dimension(), Holder.direct(parent.dimensionType()),
 						0, 0, parent.getProfilerSupplier(),
 						null, true, 0,
@@ -131,7 +131,7 @@ public class Region {
 		
 		return levels[upb];
 	}
-
+	
 	public void updateWorlds(BlockPos pos) {
 		for (Level level : levels) {
 			if (level != null) {
@@ -139,7 +139,7 @@ public class Region {
 			}
 		}
 	}
-
+	
 	public void tickWorlds() {
 		for (Level level : levels) {
 			if (level == null) continue;
@@ -154,14 +154,14 @@ public class Region {
 			}
 		}
 	}
-
+	
 	public void forEachLevel(Consumer<Level> func) {
 		for (Level level : levels) {
 			if (level == null) continue;
 			func.accept(level);
 		}
 	}
-
+	
 	public Level getLevel(PacketListener listener, Player player, int upb) {
 		if (listener instanceof ServerPacketListener) {
 			return getServerWorld(player.level().getServer(), (ServerLevel) player.level(), upb);
@@ -169,11 +169,11 @@ public class Region {
 			return getClientWorld(player.level(), upb);
 		}
 	}
-
+	
 	public Level[] getLevels() {
 		return levels;
 	}
-
+	
 	public void close() {
 		for (Level level : levels) {
 			try {
@@ -191,7 +191,7 @@ public class Region {
 			}
 		}
 	}
-
+	
 	public Level getExistingLevel(int upb) {
 		return levels[upb];
 	}

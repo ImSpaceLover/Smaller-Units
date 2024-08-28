@@ -143,7 +143,7 @@ public class MixinConnector implements IMixinConfigPlugin {
 //		}
 		if (mixinClassName.equals("tfc.smallerunits.mixin.LevelRendererMixin")) {
 			String target = ASMAPI.mapMethod("m_172993_"); // renderChunkLayer
-			String desc = "(Lnet/minecraft/client/renderer/RenderType;Lcom/mojang/blaze3d/vertex/PoseStack;DDDLcom/mojang/math/Matrix4f;)V"; // TODO: I'd like to not assume Mojmap
+			String desc = "(Lnet/minecraft/client/renderer/RenderType;Lcom/mojang/blaze3d/vertex/PoseStack;DDDLorg/joml/Matrix4f;)V"; // TODO: I'd like to not assume Mojmap
 			
 			String refOwner = "net/minecraft/client/renderer/chunk/ChunkRenderDispatcher$RenderChunk";
 			String ref = ASMAPI.mapMethod("m_112835_"); // getCompiledChunk

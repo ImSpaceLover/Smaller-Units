@@ -9,7 +9,6 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
 import net.minecraft.network.PacketListener;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -160,5 +159,10 @@ public class IHateTheDistCleaner {
 				con = Minecraft.getInstance().player.connection;
 		}
 		return con;
+	}
+	
+	public static ClientPacketListener getConnection(ClientLevel parent) {
+		// TODO: get connection from level for compat reasons
+		return getConnection();
 	}
 }
