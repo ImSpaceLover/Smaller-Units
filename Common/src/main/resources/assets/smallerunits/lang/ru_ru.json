@@ -1,8 +1,8 @@
 {
-  "item.smallerunits.su_grower": "Увеличитель элементов",
-  "item.smallerunits.su_shrinker": "Уменьшитель элементов",
-  "item.smallerunits.unit_space": "Элементарное пространство",
-  "block.smallerunits.unit_space": "Элементарное пространство",
+  "item.smallerunits.su_grower": "Увеличитель блоков",
+  "item.smallerunits.su_shrinker": "Уменьшитель блоков",
+  "item.smallerunits.unit_space": "Пространство блоков",
+  "block.smallerunits.unit_space": "Пространство блоков",
   "itemGroup.Smaller Units": "Smaller Units",
   "smallerunits.advancements.root.name": "Чем меньше, тем лучше!",
   "smallerunits.advancements.root.description": "Создайте молот изменения размера",
