@@ -8,6 +8,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.ArrayVoxelShape;
 import net.minecraft.world.phys.shapes.CubeVoxelShape;
+import net.minecraft.world.phys.shapes.SliceShape;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class ScaledShape {
@@ -19,8 +20,12 @@ public class ScaledShape {
 	boolean cube;
 	private static final Class<?> ARRAY = ArrayVoxelShape.class;
 	private static final Class<?> CUBE = CubeVoxelShape.class;
+	// TODO: is this something that I will need to worry about making a fast algo for?
+	private static final Class<?> SLICE = SliceShape.class;
 	
 	MutableAABB worker = new MutableAABB(0, 0, 0, 1, 1, 1);
+	
+	private static final Direction[] dirs = Direction.values();
 	
 	public ScaledShape(BlockPos pos, VoxelShape src, Vec3 offset, double scale) {
 		this.pos = pos;
@@ -30,9 +35,20 @@ public class ScaledShape {
 		Class<?> clazz = src.getClass();
 		usePrecise = clazz.equals(ARRAY);
 		cube = clazz.equals(CUBE);
+		if (cube) {
+			for (Direction dir : dirs) {
+				if (src.getFaceShape(dir).getClass().equals(SLICE)) {
+					cube = false;
+					usePrecise = true;
+					break;
+				}
+			}
+		}
 	}
 	
 	public BlockHitResult clip(BlockPos actualPos, Vec3 start, Vec3 end) {
+//		cube = false;
+		usePrecise = false;
 		if (cube) {
 			AABB aabb = src.bounds();
 			worker.set(aabb).scale(scale).move(offset).move(actualPos);
@@ -42,7 +58,7 @@ public class ScaledShape {
 			double d1 = end.y - start.y;
 			double d2 = end.z - start.z;
 			
-			if (worker.contains(start)) {
+			if (UnitShape.lenientContains(worker, start.x, start.y, start.z)) {
 				return new UnitHitResult(
 						start,
 						Direction.getNearest(d0, d1, d2).getOpposite(),
@@ -57,12 +73,15 @@ public class ScaledShape {
 			
 			double percentile = percent[0];
 			
-			return new UnitHitResult(
-					start.add(d0 * percentile, d1 * percentile, d2 * percentile),
-					direction, actualPos,
-					worker.contains(start),
-					pos, null
-			);
+			Vec3 sv = start.add(d0 * percentile, d1 * percentile, d2 * percentile);
+			if (UnitShape.lenientContains(worker, sv.x, sv.y, sv.z))
+				return new UnitHitResult(
+						sv,
+						direction, actualPos,
+						worker.contains(start),
+						pos, null
+				);
+			return null;
 		} else if (usePrecise) {
 			double bestDist = Double.POSITIVE_INFINITY;
 			BlockHitResult best = null;
@@ -75,7 +94,7 @@ public class ScaledShape {
 				double d1 = end.y - start.y;
 				double d2 = end.z - start.z;
 				
-				if (worker.contains(start)) {
+				if (UnitShape.lenientContains(worker, start.x, start.y, start.z)) {
 					return new UnitHitResult(
 							start,
 							Direction.getNearest(d0, d1, d2).getOpposite(),

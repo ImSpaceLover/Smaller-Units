@@ -1,13 +1,14 @@
 package tfc.smallerunits;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.item.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -76,7 +77,10 @@ public class UnitSpaceItem extends AbstractItem {
 				upb = tag.getInt("upb");
 			}
 		}
-		pTooltipComponents.add(Component.translatable("smallerunits.tooltip.scale", upb));
+		pTooltipComponents.add(
+				Component.translatable("smallerunits.tooltip.scale", upb)
+						.withStyle(ChatFormatting.GRAY)
+		);
 		super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
 	}
 }

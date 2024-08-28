@@ -8,5 +8,5 @@
   "smallerunits.advancements.root.description": "Crea un martello del ridimensionaggio",
   "smallerunits.advancements.rude.name": "Questo è da maleducati!",
   "smallerunits.advancements.rude.description": "Imposta la dimensione di un giocatore forzatamente con un martello del ridimensionaggio",
-  "smallerunits.tooltip.scale": "Scala: 1/%s"
+  "smallerunits.tooltip.scale": "1/%s Scala"
 }

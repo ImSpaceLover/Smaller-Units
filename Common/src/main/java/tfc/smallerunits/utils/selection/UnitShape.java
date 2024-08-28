@@ -235,6 +235,18 @@ public class UnitShape extends VoxelShape {
 		return clip$(calc(pStartVec, pEndVec), calc(pEndVec, pStartVec), pPos);
 	}
 	
+	// TODO: why did I need to write this..?
+	//       there's definitely a bigger underlying issue that this is working around
+	public static boolean lenientContains(
+			AABB box,
+			double p_82394_, double p_82395_, double p_82396_
+	) {
+		return
+				p_82394_ >= box.minX && p_82394_ <= box.maxX &&
+						p_82395_ >= box.minY && p_82395_ <= box.maxY &&
+						p_82396_ >= box.minZ && p_82396_ <= box.maxZ;
+	}
+	
 	private BlockHitResult clip$(Vec3 pStartVec, Vec3 pEndVec, BlockPos pPos) {
 		Vec3 vec3 = pEndVec.subtract(pStartVec);
 		if (vec3.lengthSqr() < 1.0E-7D) return null;
@@ -250,7 +262,7 @@ public class UnitShape extends VoxelShape {
 		double[] adouble = new double[]{1.0D};
 		
 		collectShape((box) -> {
-			if (box.contains(pStartVec)) return true;
+			if (lenientContains(box, pStartVec.x, pStartVec.y, pStartVec.z)) return true;
 			return UnitShape.intersects(box, pStartVec, d0, d1, d2, adouble);
 		}, (pos, state) -> {
 			int x = pos.getX();
